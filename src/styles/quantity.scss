@@ -1,0 +1,50 @@
+@import "global";
+
+.qty {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 75px;
+    height: 30px;
+    padding: 5px;
+    background-color: $white;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+
+    @include media-tablet {
+        width: 100px;
+        height: 40px;
+        padding: 10px;
+    }
+
+    &:hover {
+        background-color: $background-gray;
+    }
+
+    &__value {
+        cursor: default;
+    }
+
+    &__decrease,
+    &__increase {
+        user-select: none;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid $white;
+        display: flex;
+        justify-content: center;
+        line-height: 22px;
+        transition: background-color 0.3s, opacity 0.3s;
+
+        &:hover {
+            background-color: $white;
+        }
+
+        &.inactive {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+}

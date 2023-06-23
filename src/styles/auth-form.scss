@@ -1,0 +1,92 @@
+@import "global";
+
+.auth-wrapper {
+    max-width: 768px;
+
+    &__button {
+        margin-bottom: 50px;
+    }
+}
+
+.auth {
+    &__heading {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .close-icon {
+            cursor: pointer;
+        }
+    }
+
+    &__description {
+        @extend .typography__p;
+        font-family: $gordita-regular;
+        margin-bottom: 48px;
+
+        @include media-desktop {
+            font-size: 24px;
+        }
+    }
+
+    &__form {
+        .form__checkbox {
+            margin-top: 10px;
+            margin-bottom: 16px;
+        }
+
+        .button {
+            height: 45px;
+            width: 100%;
+            padding: 16px 55px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+
+            @include media-desktop {
+                margin-bottom: 8px;
+            }
+        }
+    }
+
+    &__create-account {
+        @extend .typography__p;
+        margin-top: 16px;
+        margin-bottom: 36px;
+        text-align: end;
+
+        @include media-desktop {
+            font-size: 24px;
+        }
+
+        .text {
+            font-family: $gordita-regular;
+        }
+
+        .link {
+            cursor: pointer;
+            font-family: $gordita-medium;
+            font-weight: 500;
+        }
+    }
+
+    &__forgot-password {
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        font-family: $gordita-medium;
+        font-size: 16px;
+        line-height: 22px;
+        color: $color-primary;
+        margin-bottom: 16px;
+        margin-top: 8px;
+        font-weight: 500;
+
+        @include media-desktop {
+            font-size: 24px;
+        }
+    }
+}

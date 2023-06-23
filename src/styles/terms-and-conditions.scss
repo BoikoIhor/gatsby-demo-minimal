@@ -1,0 +1,48 @@
+@import "global";
+
+.terms-and-conditions {
+    &__content {
+        background: $gray;
+        padding: 28px $padding 19px;
+        border-radius: 30px;
+
+        @include media-laptop {
+            padding: 52px $padding;
+        }
+    }
+
+    h1 {
+        @extend .typography__h1;
+        margin-bottom: 50px;
+    }
+
+    h5 {
+        @extend .typography__p;
+        margin: 16px 0;
+    }
+
+    p {
+        @extend .typography__p--inter;
+        margin: 16px 0;
+    }
+
+    a {
+        @extend .typography__small;
+        text-decoration-line: underline;
+
+        @include media-laptop {
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        &:hover {
+            color: $color-primary-medium;
+            text-decoration: none;
+        }
+
+        &:active {
+            color: $color-primary-dark;
+            text-decoration: none;
+        }
+    }
+}

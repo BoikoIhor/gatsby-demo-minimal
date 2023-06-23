@@ -1,0 +1,142 @@
+@import "global";
+.about-us {
+  margin: 0 auto;
+  padding: 16px $padding 0;
+  max-width: 1920px;
+
+  &__content {
+    background: $gray;
+    padding: 28px $padding 0;
+    border-radius: 30px;
+    max-width: 1920px;
+    overflow: hidden;
+
+    @include media-laptop {
+      padding: 52px $padding 0;
+      align-self: center;
+    }
+
+    h1 {
+      @extend .typography__h1;
+      margin-bottom: 50px;
+    }
+
+    h2 {
+      @extend .typography__h2;
+      margin-bottom: 50px;
+
+        @include media-tablet {
+            max-width: 50%;
+        }
+    }
+
+    h3 {
+        @extend .typography__h3;
+        margin-bottom: 40px;
+    }
+
+    h5 {
+      @extend .typography__p;
+      margin: 16px 0;
+    }
+
+    p {
+        @extend .typography__p;
+        margin: 16px 0;
+
+        @include media-laptop {
+            font-size: 24px;
+            line-height: 36px;
+            margin: 0;
+        }
+    }
+
+    a {
+      font-family: $gordita-medium;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 21px;
+      color: $color-primary;
+      text-decoration-line: underline;
+
+      @include media-laptop {
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      &:hover {
+        color: #057484;
+        text-decoration: none;
+      }
+
+      &:active {
+        color: #023941;
+        text-decoration: none;
+      }
+    }
+  }
+
+    &__banner {
+        img {
+            width: 100%;
+        }
+    }
+
+    .banner {
+
+        @include media-tablet {
+            p {
+                max-width: 50%;
+                margin: 20px auto;
+            }
+        }
+    }
+
+    .banner-column {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+
+        @include media-tablet {
+            flex-direction: row;
+            .about-us__image-container {
+                width: 50%;
+            }
+
+            .about-us__title-container {
+                width: 50%;
+                padding: 10%;
+            }
+        }
+    }
+
+    .banner-column-reverse {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+
+        @include media-tablet {
+            flex-direction: row-reverse;
+
+            .about-us__image-container {
+                width: 50%;
+            }
+
+            .about-us__title-container {
+                width: 50%;
+                padding: 10%;
+            }
+        }
+    }
+
+    .banner-footer {
+        margin: 0 -4% -4%;
+
+        p {
+            display: none;
+        }
+    }
+}

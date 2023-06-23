@@ -1,0 +1,136 @@
+@import "global";
+
+.slider-wrapper {
+  width: 100%;
+  max-width: 2700px;
+  justify-content: space-between;
+
+  &:hover {
+    .button-next-slide,
+    .button-prev-slide {
+      opacity: 0.5;
+    }
+  }
+}
+
+.swiper {
+  position: relative;
+  overflow: initial;
+  @include media-tablet {
+    padding: 0 15px 0 0;
+  }
+}
+
+.button-next-slide,
+.button-prev-slide {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background-color: black;
+  z-index: 10;
+  opacity: 0;
+  color: white;
+  transition: 0.3s all ease;
+  cursor: pointer;
+
+  @include media-tablet {
+    display: flex;
+    height: 50px;
+    width: 50px;
+  }
+}
+
+.button-next-slide {
+  right: 10px;
+}
+
+.button-prev-slide {
+  left: 10px;
+
+  img {
+    transform: rotate(180deg);
+  }
+}
+
+.swiper-pagination-bullet {
+  display: none !important;
+}
+.swiper-pagination-bullet-active-main {
+  height: 18px !important;
+  width: 18px !important;
+  display: block !important;
+  background: #004751 !important;
+}
+.swiper-pagination-bullet-active-next,
+.swiper-pagination-bullet-active-prev {
+  background: #d9d9d9 !important;
+  display: block !important;
+  opacity: 1 !important;
+  height: 14px !important;
+  width: 14px !important;
+  transform: scale(1) !important;
+}
+
+.swiper-pagination-bullet-active-next-next,
+.swiper-pagination-bullet-active-prev-prev {
+  display: none !important;
+}
+
+.swiper-pagination-bullets-dynamic {
+  min-width: 110px !important;
+  overflow: unset !important;
+}
+
+.swiper-pagination-image {
+  height: 45px;
+  width: 45px;
+
+  @include media-tablet {
+    height: 61px;
+    width: 61px;
+  }
+
+  img {
+    border-radius: 50%;
+    background-color: #f9f9f9;
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+    border: 2px solid #b2c9cc;
+
+    @include media-tablet {
+      height: 61px;
+      width: 61px;
+    }
+  }
+}
+
+.swiper-pagination-image-active {
+  height: 46px;
+  width: 46px;
+
+  @include media-tablet {
+    height: 61px;
+    width: 61px;
+  }
+
+  img {
+    border-radius: 50%;
+    background-color: #f9f9f9;
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+    border: 2px solid #004751;
+
+    @include media-tablet {
+      height: 61px;
+      width: 61px;
+    }
+  }
+}

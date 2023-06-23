@@ -1,0 +1,192 @@
+@import 'common';
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+html[data-scroll-lock='true'] {
+  overflow: hidden;
+}
+
+:root {
+  --background-main: #{$background-gray};
+}
+
+body {
+  background-color: var(--background-main);
+}
+
+a,
+button,
+img,
+div,
+span {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
+}
+
+input:focus-visible {
+    border: none;
+    outline: none;
+}
+
+// Basic breakpoint mixins //
+
+@mixin media-tablet {
+    @media screen and (min-width: 768px) {
+      @content;
+    }
+}
+
+@mixin media-small-laptop {
+    @media screen and (min-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin media-laptop {
+    @media screen and (min-width: 1440px) {
+      @content;
+    }
+}
+
+@mixin media-desktop {
+    @media screen and (min-width: 1850px) {
+      @content;
+    }
+}
+
+// Classes
+// typography__h1, typography__h2, typography__h3, typography__title,
+// typography__subtitle, typography__subtitle--inter
+// typography__p, typography__p--inter, typography__small, typography__small--inter
+
+.typography {
+
+  @include typography (
+    28px,
+    400,
+    $gordita-medium,
+    37px,
+    $color-primary,
+    none
+  );
+
+  &__h1 {
+    @extend .typography;
+
+    @include media-laptop {
+      font-size: 60px;
+      line-height: 82px;
+    }
+  }
+
+  &__h2 {
+    @extend .typography;
+    font-size: 24px;
+    line-height: 42px;
+
+    @include media-laptop {
+      font-size: 42px;
+      line-height: 50px;
+    }
+  }
+
+  &__h3 {
+    @extend .typography;
+    font-size: 22px;
+    line-height: 28px;
+
+    @include media-laptop {
+      font-size: 32px;
+      line-height: 48px;
+    }
+  }
+
+  &__title {
+    @extend .typography;
+    font-size: 18px;
+    line-height: 18px;
+
+    @include media-laptop {
+      font-size: 22px;
+      line-height: 24px;
+    }
+  }
+
+  &__subtitle {
+    @extend .typography;
+    font-size: 16px;
+    line-height: 24px;
+
+    @include media-laptop {
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    &--inter {
+      @extend .typography__subtitle;
+      font-family: $font-inter;
+    }
+  }
+
+  &__p {
+    @extend .typography;
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+
+    &--inter {
+      @extend .typography__p;
+      font-family: $font-inter;
+    }
+  }
+
+  &__small {
+    @extend .typography;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration: none;
+
+    &--inter {
+      @extend .typography__small;
+      font-family: $font-inter;
+    }
+  }
+
+  &__sub-text {
+    @extend .typography;
+    font-size: 12px;
+    line-height: 14px;
+    text-decoration: none;
+
+    &--inter {
+      @extend .typography__sub-text;
+      font-family: $font-inter;
+    }
+  }
+}
+
+// Keyframes
+
+@keyframes fadeIn {
+  99% {
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
+    height: 0;
+  }
+}
+
+@keyframes fadeInPopup {
+    99% {
+        visibility: visible;
+    }
+    100% {
+        visibility: hidden;
+    }
+}

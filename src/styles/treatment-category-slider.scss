@@ -1,0 +1,179 @@
+@import "global";
+.treatment-category-slider {
+  width: 100%;
+  max-width: 2700px;
+  position: relative;
+
+    .swiper-button-disabled {
+        display: none;
+    }
+
+  @include media-desktop {
+    height: auto;
+  }
+
+    &__title-container {
+        margin-bottom: 20px;
+        top: $padding;
+    }
+
+    &__title {
+        @extend .typography__h2;
+    }
+
+    &__sub-title {
+        @extend .typography__p--inter;
+        margin-bottom: 20px;
+    }
+
+  &__slides {
+    display: flex;
+    overflow: hidden;
+    gap: 28px;
+
+    @include media-laptop {
+      gap: 37px;
+        overflow: unset;
+    }
+
+      .treatments-slide-link {
+          cursor: pointer;
+          display: block;
+          width: 100%;
+          margin-top: var(--box-shadow-visible-room);
+          margin-bottom: var(--box-shadow-visible-room);
+          text-transform: none;
+          color: rgba(0, 0, 0, 0.89);
+          background-color: rgb(247, 247, 247);
+          box-shadow: rgba(0, 0, 0, 0) 0 8px 0;
+          transform: scale(1);
+          padding: 128% 0 0;
+          border-width: initial;
+          border-style: none;
+          border-color: initial;
+          border-image: initial;
+          border-radius: 30px;
+          transition: background-color, box-shadow, transform;
+          transition-duration: 300ms;
+          text-decoration: none;
+          font-size: calc(0.75rem + (2 * (100vw - 1440px)) / 1119);
+
+          @include media-small-laptop {
+              padding: 106% 0 0;
+          }
+
+          @include media-laptop {
+              &:hover {
+                  background-color: rgb(255, 255, 255);
+                  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+                  transform: scale(1.02);
+              }
+          }
+      }
+
+      .treatments-slide {
+          display: flex;
+          flex-direction: column;
+          -webkit-box-pack: justify;
+          justify-content: space-between;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+
+          &__image-container {
+              display: block;
+              position: relative;
+          }
+
+          &__image {
+              will-change: opacity;
+              display: block;
+              opacity: 1;
+              border: 8px solid transparent;
+              border-radius: 30px;
+              transition: border-color 120ms ease-out 0s;
+              width: 100%;
+          }
+
+          &__title-container {
+              position: absolute;
+              top: 5%;
+              padding: 0 5%;
+          }
+
+          &__title {
+              @extend .typography__title;
+              margin-bottom: 10px;
+
+              @include media-laptop {
+                  margin-bottom: 22px;
+              }
+              @include media-desktop {
+                  font-size: 28px;
+              }
+          }
+
+          &__subtext {
+              font-family: $gordita-regular;
+
+              @include media-desktop {
+                  font-size: 22px;
+                  width: 80%;
+              }
+          }
+
+          &__action-container {
+              display: flex;
+              align-items: flex-end;
+              -webkit-box-pack: justify;
+              justify-content: space-between;
+              width: 100%;
+              padding: 0 15px 10px;
+              text-align: left;
+
+              @include media-laptop {
+                  padding: 20px;
+              }
+          }
+
+          &__content-button {
+              border: none;
+              padding: 0;
+              height: 100%;
+              width: 100%;
+
+              a {
+                  gap: 3px;
+                  justify-content: space-between;
+                  width: 100%;
+              }
+
+              span {
+                  font-size: 3vw;
+                  line-height: normal;
+                  text-align: start;
+                  @extend .typography__p--inter;
+
+                  @include media-tablet {
+                      font-size: 16px;
+                  }
+
+                  @include media-tablet {
+                      font-size: 24px;
+                  }
+              }
+          }
+      }
+  }
+
+  .slider-wrapper {
+    padding-left: 0;
+
+    .swiper {
+      padding: 0;
+      overflow: initial;
+    }
+  }
+}

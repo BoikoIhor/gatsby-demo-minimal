@@ -1,0 +1,51 @@
+@import "global";
+
+.breadcrumbs {
+    max-width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        user-select: none;
+
+        & + & {
+            padding-left: 3px;
+
+            @include media-tablet {
+                padding-left: 10px;
+            }
+        }
+
+        a, &--inactive {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: text-decoration-color 0.3s;
+            font-size: 13px;
+            line-height: 15px;
+            font-family: $gordita-regular;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration-color: $color-primary;
+            }
+        }
+
+        &--disabled {
+            cursor: default;
+            text-decoration: none;
+        }
+    }
+
+    &__arrow {
+        stroke: $color-primary;
+        height: 10px;
+        margin-right: 3px;
+
+        @include media-tablet {
+            margin-right: 10px;
+        }
+    }
+}

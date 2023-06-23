@@ -1,0 +1,151 @@
+@import "global";
+
+.aside {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: $gray;
+  overflow-y: scroll;
+  transition: transform 0.4s;
+  transform: translate(100%);
+  border-radius: 30px 0 0 30px;
+  padding: 10px $padding;
+  width: calc(100% - 25px);
+  max-width: 768px;
+
+  @include media-tablet {
+    padding: 25px;
+    width: 50%;
+    min-width: 560px;
+  }
+
+  @include media-laptop {
+    padding: 40px;
+    width: auto;
+  }
+
+  &__wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    animation: 0.3s fadeInPopup;
+    animation-fill-mode: forwards;
+
+    &.active {
+      animation: none;
+      visibility: visible;
+    }
+  }
+
+  .active & {
+    transform: translateX(0);
+  }
+
+  &__overlay {
+    background-color: var(--background-main);
+    will-change: opacity;
+    transition: opacity 0.3s;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+
+    .active & {
+        opacity: 0.88;
+    }
+  }
+
+  &__close-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    padding-right: 6px;
+    height: 44px;
+    align-items: center;
+  }
+
+  &__close {
+    cursor: pointer;
+
+    @include media-tablet {
+      width: 20px;
+      height: 20px;
+      right: 25px;
+      top: 25px;
+    }
+
+    @include media-laptop {
+      right: 40px;
+      top: 40px;
+    }
+  }
+
+  &-banner {
+    position: relative;
+    margin-top: 72px;
+    height: 240px;
+
+    @include media-laptop {
+      height: 350px;
+    }
+
+    @include media-desktop {
+      margin-top: 100px;
+    }
+
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      z-index: -10;
+    }
+
+    &__content {
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 25px;
+
+      &-heading {
+        @extend .typography;
+        font-size: 29px;
+        line-height: 35px;
+        max-width: 480px;
+
+        @include media-desktop {
+          font-size: 42px;
+          line-height: 50px;
+        }
+      }
+
+      .button {
+        padding: 20px 16px;
+        height: 42px;
+        width: fit-content;
+
+        &.aside-banner__content-button--empty {
+          width: 42px;
+
+          @include media-desktop {
+            width: 84px;
+          }
+        }
+
+        @include media-desktop {
+          height: 84px;
+          width: 84px;
+          padding: 40px 32px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+@import "global";
+
+.hero-banner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    overflow: hidden;
+    height: 100%;
+    max-height: 490px;
+
+    @include media-tablet {
+        max-height: unset;
+    }
+
+    .content {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding-left: 16px;
+        box-sizing: content-box;
+        max-width: 250px;
+
+        @include media-tablet {
+            max-width: 350px;
+        }
+
+        @include media-laptop {
+            max-width: 600px;
+            padding-left: 52px;
+        }
+
+        &__title {
+            @include media-tablet {
+                max-width: unset;
+            }
+        }
+
+        &__description {
+            font-family: $gordita-regular;
+            margin-top: 12px;
+
+            @include media-tablet {
+                max-width: unset;
+            }
+
+            @include media-laptop {
+                margin-top: 20px;
+            }
+        }
+
+        &__button {
+            margin-top: 32px;
+
+            &:hover {
+                @include media-small-laptop {
+                    background-color: rgba(255, 255, 255, 0.51);
+                }
+            }
+
+            @include media-laptop {
+                margin-top: 54px;
+            }
+        }
+    }
+
+    .background {
+        width: 100%;
+
+        img {
+            width: 100%;
+            object-fit: cover;
+            object-position: bottom;
+            height: 100%;
+
+            @include media-laptop {
+                object-position: center;
+            }
+        }
+    }
+}

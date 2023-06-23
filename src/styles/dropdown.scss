@@ -1,0 +1,119 @@
+@import "global";
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+
+  @include media-laptop {
+    gap: 24px;
+  }
+
+  @include media-desktop {
+    gap: 40px;
+  }
+
+  &__item {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 17px 18px 14px 23px;
+    align-items: flex-start;
+    background: $white;
+    border-radius: 24px;
+    cursor: pointer;
+    border-radius: 0;
+    background: unset;
+    padding: 0;
+
+    @include media-laptop {
+      min-height: 52px;
+      font-size: 16px;
+      line-height: 21px;
+    }
+
+    &-button {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      @include media-laptop {
+        &:hover .dropdown__item-button__arrow-container {
+          opacity: 0.65;
+          animation: 1800ms linear 0s infinite normal none running arrowMove;
+        }
+      }
+
+      &__title {
+        @extend .typography__subtitle;
+
+        @include media-desktop {
+          font-size: 28px;
+        }
+      }
+
+      .dropdown-arrow {
+        height: 8px;
+        width: 16px;
+        align-self: center;
+
+        @include media-laptop {
+          height: 13px;
+          width: 26px;
+        }
+
+        @include media-desktop {
+          height: 16px;
+          width: 32px;
+        }
+
+        &-active {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    &-content {
+      will-change: height;
+      height: 50px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      border-color: rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+
+      @extend .typography__subtitle;
+      font-family: $gordita-regular;
+      margin-top: 15px;
+
+      @include media-laptop {
+        height: 100px;
+      }
+
+      @include media-desktop {
+        font-size: 28px;
+      }
+
+      &-close {
+        @extend .typography__subtitle;
+        height: 0;
+        will-change: height;
+        overflow: hidden;
+        border-color: rgba(0, 0, 0, 0.12);
+        transition: all 0.3s ease-in-out;
+        font-family: $gordita-regular;
+        opacity: 0.1;
+
+        @include media-desktop {
+          font-size: 28px;
+        }
+      }
+    }
+  }
+}

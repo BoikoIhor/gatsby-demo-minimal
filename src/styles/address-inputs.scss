@@ -1,0 +1,39 @@
+@import "global";
+
+.address-inputs {
+    &__row {
+        display: flex;
+        gap: 10px;
+
+        .input-wrapper {
+            margin: 0 0 20px;
+
+            + .input-wrapper {
+                margin-top: 0;
+            }
+
+            input {
+                background: $gray;
+                padding: 10px;
+                height: auto;
+            }
+
+            .placeholder {
+                left: 12px;
+
+                &.smaller {
+                    transform: scale(0.5) translateY(-225%);
+                }
+            }
+        }
+
+        .select {
+            margin-bottom: 20px;
+
+            .placeholder {
+                left: 10px;
+                transform: scale(0.5) translateY(-225%);
+            }
+        }
+    }
+}

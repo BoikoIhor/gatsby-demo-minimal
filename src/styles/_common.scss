@@ -1,0 +1,46 @@
+@import 'fonts';
+
+// Font variables 
+$font-inter: 'Inter', sans-serif;
+$gordita-regular: 'gorditaRegular', sans-serif;
+$gordita-medium: 'gorditaMedium', sans-serif;
+$gordita-bold: 'gorditaBold', sans-serif;
+
+// Colors 
+$white: #fff;
+$gray: #f9f9f9;
+$gray-darker: #f5f4f4;
+$color-primary: #004751;
+$color-primary-dark: #023941;
+$color-primary-medium: #057484;
+$color-secondary: #2B6971;
+$background-green: #B2C9CC;
+$background-cards: #DDE1DC;
+$background-gray: #DDE4E5;
+$background-brown: #F4EEDA;
+$background-blue: #E0EBF1;
+$background-light-blue: #EDF1F1;
+$background-red: #F7E7D2;
+$color-warning: #F67171;
+$color-success: #A4D785;
+$color-information: #F2D156;
+
+// Padding
+$padding: calc(100vw / 30);
+
+// Mixins
+@mixin typography(
+  $font-size,
+  $font-weight,
+  $font-family,
+  $line-height,
+  $color,
+  $text-transform
+) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  font-family: $font-family;
+  line-height: $line-height;
+  color: $color;
+  text-transform: $text-transform;
+}

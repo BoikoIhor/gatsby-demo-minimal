@@ -1,0 +1,120 @@
+@import "global";
+
+.select {
+    cursor: pointer;
+    position: relative;
+    min-width: 60px;
+    margin-bottom: 10px;
+    width: 200px;
+
+    @include media-tablet {
+        min-width: 90px;
+    }
+
+    &.active {
+        z-index: 1;
+    }
+
+    select {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+    }
+
+    .placeholder {
+        position: absolute;
+        user-select: none;
+        pointer-events: none;
+        color: $color-primary-medium;
+        transition: transform 0.3s;
+        left: 20px;
+        top: 50%;
+        transform-origin: left;
+        z-index: 2;
+        transform: scale(0.5) translateY(-250%);
+
+        @include media-desktop {
+            transform: scale(0.75) translateY(-200%);
+        }
+    }
+}
+
+.select__current {
+    background-color: $gray;
+    border-radius: 8px;
+    padding: 10px;
+    transition: background-color 0.3s;
+    position: relative;
+    display: flex;
+    gap: 10px;
+    z-index: 1;
+
+    &-arrow {
+        width: 15px;
+        margin-left: auto;
+        transition: transform 0.15s;
+    }
+
+    &:hover,
+    .active & {
+        background-color: $background-gray;
+    }
+
+    .active & {
+        &-arrow {
+            transform: rotate(-180deg);
+        }
+    }
+}
+
+.select__options {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    width: max-content;
+    min-width: 100%;
+    max-width: calc(100vw - 60px);
+    transition: opacity 0.1s;
+    margin-top: -8px;
+    padding-top: 8px;
+    border-radius: 8px;
+    border: 1px solid $background-gray;
+    border-top: none;
+    border-bottom: none;
+    background: $white;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .active & {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    li {
+        text-align: left;
+        margin: -10px -1px 0;
+        padding: 15px 15px 5px;
+        border: 1px solid $background-gray;
+        border-radius: 0 0 8px 8px;
+        border-top-color: transparent;
+        transition: background 0.15s;
+
+        &.selected {
+            border-radius: 8px;
+            margin-top: -7px;
+            padding: 12px 15px 5px;
+            border-top-color: $background-gray;
+            background: $gray;
+        }
+
+        &:hover {
+            font-family: $gordita-bold;
+        }
+    }
+}

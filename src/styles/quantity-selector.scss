@@ -1,0 +1,55 @@
+@import 'global';
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+
+    @include media-tablet {
+        width: 360px;
+    }
+  
+    &__input {
+        @extend .typography__h3;
+        line-height: 52px;
+        border-radius: 15px;
+        text-align: center;
+        min-width: 160px;
+        padding-top: 6px;
+        width: 80%;
+        border: none;
+        outline: none;
+
+        @include media-tablet {
+            width: 50%;
+        }
+    }
+  
+    &__button {
+        width: 25%;
+        height: 58px;
+        @extend .typography__h3;
+        line-height: 52px;
+        border-radius: 15px;
+        padding-top: 6px;
+        text-align: center;
+        background-color: $white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    
+        &:hover {
+            background-color: $color-primary;
+            color: $white;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            user-select: none;
+            background-color: $gray;
+            color: inherit;
+        }
+    }
+  }

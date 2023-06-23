@@ -1,0 +1,63 @@
+@import "global";
+
+.banners {
+  width: 100%;
+
+  &-posts {
+    display: grid;
+      gap: calc((100vw - (1.5rem * 2)) / 25) 0;
+
+      @include media-tablet {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 50px 20px;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 1fr;
+      }
+
+    @include media-laptop {
+      gap: 100px 20px;
+    }
+  }
+
+    &__title-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .button {
+            display: none;
+
+            @include media-tablet {
+                display: flex;
+            }
+        }
+    }
+
+  &-title {
+    margin-bottom: 24px;
+    text-align: left;
+
+    @include media-tablet {
+      margin-bottom: 40px;
+    }
+
+    @include media-laptop {
+        margin-bottom: 80px;
+    }
+  }
+  .mobile-banners-link {
+      display: grid;
+      justify-content: end;
+
+    .button {
+      display: flex;
+      margin-top: 30px;
+
+      @include media-tablet {
+        display: none;
+      }
+    }
+  }
+}

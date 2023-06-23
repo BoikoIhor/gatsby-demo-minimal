@@ -1,0 +1,111 @@
+@import "global";
+.FAQ-slider {
+  width: 100%;
+  max-width: 2700px;
+
+  @include media-desktop {
+    height: auto;
+  }
+
+  &__title {
+    @extend .typography__h2;
+    margin-bottom: 18px;
+
+    @include media-laptop {
+      margin-bottom: 40px;
+    }
+  }
+
+  &__slides {
+    display: flex;
+    overflow: hidden;
+    gap: 28px;
+
+    @include media-laptop {
+      gap: 37px;
+    }
+
+    .swiper-wrapper {
+      margin-bottom: 45px;
+    }
+
+    .FAQ-slide {
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+        background: $white;
+        padding: 20px;
+        border-radius: 15px;
+        height: 450px;
+        
+        @include media-tablet {
+          height: 400px;
+        }
+
+        @include media-laptop {
+          height: 450px;
+        }
+
+        &__image-container {
+            background: none;
+            border-radius: 25px;
+            overflow: hidden;
+            height: 213px;
+
+            @include media-laptop {
+                width: 100%;
+                height: 265px;
+            }
+        }
+
+        &__image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            margin-bottom: 37px;
+        }
+
+        &__title {
+            @extend .typography__title;
+            margin-bottom: 10px;
+
+            @include media-laptop {
+                margin-bottom: 22px;
+            }
+            @include media-desktop {
+                font-size: 28px;
+            }
+        }
+
+        &__subtext {
+            font-family: $gordita-regular;
+        }
+    }
+  }
+
+  .slider-wrapper {
+    padding-left: 0;
+
+    .swiper {
+      padding: 0;
+    }
+  }
+}
+
+.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet, .swiper-pagination-horizontal.swiper-pagination-bullets {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & .swiper-pagination-bullet {
+    width: 14px;
+    height: 14px;
+    background-color: gray;
+
+    &-active {
+      background-color: $color-primary;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

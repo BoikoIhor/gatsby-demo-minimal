@@ -1,0 +1,18 @@
+@import "global";
+
+.main {
+  padding-left: $padding;
+  padding-right: $padding;
+
+  @include media-laptop {
+    margin: 0 auto;
+    max-width: 1920px;
+    // fullscreen - header - footer
+    min-height: calc(100vh - 80px - 420px);
+  }
+}
+
+// Toastify styles
+:root {
+  --toastify-color-progress-light: #{$color-primary-medium};
+}
