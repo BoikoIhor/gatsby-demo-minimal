@@ -46,6 +46,14 @@ const CheckoutPayment = (props) => {
             expiryYear: +`20${expiryDate.split(' / ')[1]}`,
         };
 
+        await axios.post("/api/zendesk/create_deal", {
+            createdOrder,
+            order,
+            customerData,
+            subscription_id: 100500,
+            questionnaire_pdf_url: localStorage.getItem('questionnaire_file_url')
+        });
+
         toast.loading('Order is creating...', { toastId: 'order' });
 
         const awaitingPaymentStatus = paymentStatuses.find(status => status.system_label === "Awaiting Payment")
