@@ -112,40 +112,44 @@ async function setTicketComment(userId, ticketId, message, req) {
 }
 
 export default async function handler(req, res) {
-    let response = [];
-    let customer_id = false;
-    let type = '';
-    let message = '';
+    try {
+        let response = [];
+        let customer_id = false;
+        let type = '';
+        let message = '';
 
-    if(req.query.customer_id) {
-        customer_id = req.query.customer_id;
-    }
-    if(req.body.customer_id) {
-        customer_id = req.body.customer_id;
-    }
-    if(req.query.type) {
-        type = req.query.type;
-    }
-    if(req.body.type) {
-        type = req.body.type;
-    }
-    if(req.query.message) {
-        message = req.query.message;
-    }
-    if(req.body.message) {
-        message = req.body.message;
-    }
-
-    let contactData =  await getContact(customer_id);
-    let userId =  await getUser(customer_id);
-
-    let ticketsIds = getContactTickets(contactData, type);
-
-    for (const index in ticketsIds) {
-        if(type == index) {
-            response = await setTicketComment(userId, ticketsIds[index], message, req);
+        if (req.query.customer_id) {
+            customer_id = req.query.customer_id;
         }
-    }
+        if (req.body.customer_id) {
+            customer_id = req.body.customer_id;
+        }
+        if (req.query.type) {
+            type = req.query.type;
+        }
+        if (req.body.type) {
+            type = req.body.type;
+        }
+        if (req.query.message) {
+            message = req.query.message;
+        }
+        if (req.body.message) {
+            message = req.body.message;
+        }
 
-    res.json(response);
+        let contactData = await getContact(customer_id);
+        let userId = await getUser(customer_id);
+
+        let ticketsIds = getContactTickets(contactData, type);
+
+        for (const index in ticketsIds) {
+            if (type == index) {
+                response = await setTicketComment(userId, ticketsIds[index], message, req);
+            }
+        }
+        res.json(response);
+    }
+    catch (error) {
+        res.status(500).json({ error: error });
+    }
 }

@@ -268,55 +268,59 @@ async function createZendeskDeal(fields) {
 }
 
 export default async function handler(req, res) {
-    let neededTicketType = await checkNeedDeal(req.body.order.products);
-    if (neededTicketType) {
-        //need to create deal
-        const currentDate = new Date();
-        const currentDateText = currentDate.toISOString();
-        currentDate.setDate(currentDate.getDate() + 1);
-        const taskDueText = currentDate.toISOString();
-        currentDate.setHours(currentDate.getHours() - 1);
-        const taskRemindText = currentDate.toISOString();
+    try {
+        let neededTicketType = await checkNeedDeal(req.body.order.products);
+        if (neededTicketType) {
+            //need to create deal
+            const currentDate = new Date();
+            const currentDateText = currentDate.toISOString();
+            currentDate.setDate(currentDate.getDate() + 1);
+            const taskDueText = currentDate.toISOString();
+            currentDate.setHours(currentDate.getHours() - 1);
+            const taskRemindText = currentDate.toISOString();
 
-        let file_url = '';
-        if(req.body.questionnaire_pdf_url && req.body.questionnaire_pdf_url!='undefined' && req.body.questionnaire_pdf_url!='null') {
-            file_url = req.body.questionnaire_pdf_url;
-        }
-        const zendeskFields = {
-            contact: {
-                data: {
-                    first_name: req.body.customerData.first_name,
-                    last_name: req.body.customerData.last_name,
-                    email: req.body.customerData.email,
-                    custom_fields: {
-                        bigcommerce_id: req.body.order.customer_id
-                    }
-                }
-            },
-            deal: {
-                name: "Order "+req.body.createdOrder.id+" from "+currentDateText,
-                value: req.body.createdOrder.total_inc_tax,
-                hot: true,
-                tags: [
-                    "important"
-                ],
-                custom_fields: {
-                    order_id: req.body.createdOrder.id,
-                    file: file_url,
-                    checking_type: neededTicketType,
-                    subscription_id: req.body.subscription_id
-                }
-            },
-            task: {
-                content: "Order "+req.body.createdOrder.id+" from "+currentDateText,
-                due_date: taskDueText,
-                remind_at: taskRemindText,
-                resource_type: 'deal'
+            let file_url = '';
+            if (req.body.questionnaire_pdf_url && req.body.questionnaire_pdf_url != 'undefined' && req.body.questionnaire_pdf_url != 'null') {
+                file_url = req.body.questionnaire_pdf_url;
             }
-        };
+            const zendeskFields = {
+                contact: {
+                    data: {
+                        first_name: req.body.customerData.first_name,
+                        last_name: req.body.customerData.last_name,
+                        email: req.body.customerData.email,
+                        custom_fields: {
+                            bigcommerce_id: req.body.order.customer_id
+                        }
+                    }
+                },
+                deal: {
+                    name: "Order " + req.body.createdOrder.id + " from " + currentDateText,
+                    value: req.body.createdOrder.total_inc_tax,
+                    hot: true,
+                    tags: [
+                        "important"
+                    ],
+                    custom_fields: {
+                        order_id: req.body.createdOrder.id,
+                        file: file_url,
+                        checking_type: neededTicketType,
+                        subscription_id: req.body.subscription_id
+                    }
+                },
+                task: {
+                    content: "Order " + req.body.createdOrder.id + " from " + currentDateText,
+                    due_date: taskDueText,
+                    remind_at: taskRemindText,
+                    resource_type: 'deal'
+                }
+            };
 
-        createZendeskDeal(zendeskFields);
+            createZendeskDeal(zendeskFields);
+        }
+        res.json(req.body.responce);
     }
-
-    res.json(req.body.responce);
+    catch (error) {
+        res.status(500).json({ error: error });
+    }
 }
