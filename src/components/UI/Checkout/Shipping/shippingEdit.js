@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useCurrency } from "context/currencyContext";
-import { useCart } from "context/cartContext";
+import { useCheckout } from "context/checkoutContext";
 
 import Button from "components/UI/button";
 
@@ -9,7 +9,9 @@ const ShippingEdit = (props) => {
     const { shippingAddress, setIsShippingEdit } = props;
 
     const { currency } = useCurrency();
-    const { shippingAmount } = useCart();
+    const { order } = useCheckout();
+
+    const shippingCost = order?.base_shipping_cost;
 
     return (
         <>
@@ -59,7 +61,7 @@ const ShippingEdit = (props) => {
                         <span className="checkout-address__shipping-edit--method">
                             {shippingAddress.shipping_method}
                             <span className="checkout-address__shipping-edit--bold">
-                                {shippingAmount} {currency.token}
+                                {shippingCost} {currency.token}
                             </span>
                         </span>
                     )

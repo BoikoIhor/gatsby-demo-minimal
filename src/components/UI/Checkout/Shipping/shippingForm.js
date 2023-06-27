@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCustomer } from "context/customerContext";
 import { useCurrency } from "context/currencyContext";
 import { useCheckout } from "context/checkoutContext";
 import { useCart } from "context/cartContext";
@@ -14,12 +13,18 @@ import RadioField from "components/UI/Inputs/RadioField";
 import Loader from "components/UI/loader";
 
 const ShippingForm = (props) => {
-    const { shippingAddress, setShippingAddress, setIsShippingEdit, setIsBillingEdit, setBillingAddress } = props;
+    const {
+        customerData,
+        shippingAddress,
+        setShippingAddress,
+        setIsShippingEdit,
+        setIsBillingEdit,
+        setBillingAddress,
+    } = props;
 
     const { currency } = useCurrency();
-    const { customerData } = useCustomer();
-    const { shippingZones } = useCheckout();
-    const { cartQty, setShippingAmount } = useCart();
+    const { shippingZones, updateOrder } = useCheckout();
+    const { cartQty } = useCart();
 
     const [customerCountry, setCustomerCountry] = useState("");
     const [customerShippingMethod, setCustomerShippingMethod] = useState("");
@@ -61,7 +66,7 @@ const ShippingForm = (props) => {
             return;
         }
         setCustomerCountry(name);
-        setShippingAmount()
+        updateOrder('base_shipping_cost', null)
 
         setIsShippingLoading(true);
         axios
@@ -121,84 +126,84 @@ const ShippingForm = (props) => {
     const calculateShipping = (method) => {
         switch (method.type) {
             case "peritem":
-                setShippingAmount(method.settings.rate * cartQty)
+                updateOrder('base_shipping_cost', method.settings.rate * cartQty)
                 break;
             case "perorder":
-                setShippingAmount(method.settings.rate)
+                updateOrder('base_shipping_cost', method.settings.rate)
                 break;
             case "freeshipping":
             default:
-                setShippingAmount(0)
+                updateOrder('base_shipping_cost', 0)
         }
     }
 
     return (
-        customerData.id && (
-            <form onSubmit={onShippingSubmit} name="shipping-address">
+        <form onSubmit={onShippingSubmit} name="shipping-address">
+            {
                 <AddressInputs
                     defaultCustomerAddress={shippingAddress}
                     customerId={customerData.id}
                     countriesSelect={countriesSelect}
                     onCountryChange={onCountryChange}/>
+            }
 
-                <div className="checkout-address__shipping-method">
-                    <h4 className="checkout-address__subtitle typography__title">Shipping Method</h4>
-                    {
-                        !isShippingLoading ? (
-                            shippingMethods ? (
-                                shippingMethods.length > 0 ? (
-                                    shippingMethods.map((method, index) => (
-                                        <RadioField
-                                            key={index}
-                                            className={"form__radio checkout-address__shipping-radio"}
-                                            name="shipping_method"
-                                            value={method.name}
-                                            checked={customerShippingMethod && method.name === customerShippingMethod.name}
-                                            onChange={() => {
-                                                setCustomerShippingMethod(method)
-                                                calculateShipping(method)
-                                            }}
-                                            required
-                                        >
+            <div className="checkout-address__shipping-method">
+                <h4 className="checkout-address__subtitle typography__title">Shipping Method</h4>
+                {
+                    !isShippingLoading ? (
+                        shippingMethods ? (
+                            shippingMethods.length > 0 ? (
+                                shippingMethods.map((method, index) => (
+                                    <RadioField
+                                        key={index}
+                                        className={"form__radio checkout-address__shipping-radio"}
+                                        name="shipping_method"
+                                        value={method.name}
+                                        checked={customerShippingMethod && method.name === customerShippingMethod.name}
+                                        onChange={() => {
+                                            setCustomerShippingMethod(method)
+                                            calculateShipping(method)
+                                        }}
+                                        required
+                                    >
                                         <span className="typography__p">
                                             {method.settings.rate ?? 0} {currency.token}
                                         </span>
-                                        </RadioField>
-                                    ))
-                                ) : (
-                                    <p className="typography__p">
-                                        Unfortunately one or more items in your cart can't be shipped to your location.
-                                        Please choose a different delivery address.
-                                    </p>
-                                )
+                                    </RadioField>
+                                ))
                             ) : (
                                 <p className="typography__p">
-                                    Please select a shipping address in order to see shipping quotes
+                                    Unfortunately one or more items in your cart can't be shipped to your location.
+                                    Please choose a different delivery address.
                                 </p>
                             )
                         ) : (
-                            <Loader/>
+                            <p className="typography__p">
+                                Please select a shipping address in order to see shipping quotes
+                            </p>
                         )
-                    }
-                </div>
+                    ) : (
+                        <Loader/>
+                    )
+                }
+            </div>
 
-                <Input
-                    type="checkbox"
-                    checked={isSaveAddress}
-                    onChange={() => setIsSaveAddress(!isSaveAddress)}
-                    placeholder="Save this address in my address book."
-                />
-                <Input
-                    type="checkbox"
-                    checked={isBillingSameAsShipping}
-                    onChange={() => setIsBillingSameAsShipping(!isBillingSameAsShipping)}
-                    placeholder="My billing address is the same as my shipping address."
-                />
+            <Input
+                type="checkbox"
+                checked={isSaveAddress}
+                onChange={() => setIsSaveAddress(!isSaveAddress)}
+                placeholder="Save this address in my address book."
+            />
+            <Input
+                type="checkbox"
+                checked={isBillingSameAsShipping}
+                onChange={() => setIsBillingSameAsShipping(!isBillingSameAsShipping)}
+                placeholder="My billing address is the same as my shipping address."
+            />
 
-                <Button className="checkout-address__submit"
-                        value="Save Shipping Address" type="dark" isArrowShow isSubmit/>
-            </form>
-        )
+            <Button className="checkout-address__submit"
+                    value="Save Shipping Address" type="dark" isArrowShow isSubmit/>
+        </form>
     );
 };
 

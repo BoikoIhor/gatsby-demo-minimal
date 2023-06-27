@@ -36,14 +36,6 @@ const ProductPageFAQ = (props) => {
         <h2 className="typography__h2 product-page__dropdown-faq-title">
           {banner.title}
         </h2>
-        <Button
-            className="button product-page__dropdown-button"
-            value={banner.link.text}
-            type={banner.link.type}
-            href={banner.link.href}
-            isArrowShow={banner.link.isArrowShow}
-            onClick={onClick}
-          />
       </div>
     </div>
   );

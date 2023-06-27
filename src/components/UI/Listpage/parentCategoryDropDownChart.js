@@ -6,28 +6,31 @@ import { renderRichText } from "gatsby-source-contentful/rich-text";
 export const categoryDropdownBannerChartQuery = graphql`
   query CategoryDropdownBannerChartQuery {
     allContentfulBannerUpdated(
-        filter: {location: {eq: "category-page"}, type: {eq: "dropdown-chart"}}
-        ) {
-        edges {
-          node {
-            title
-            type
-            location
-            image {
-              file {
-                url
-              }
-            }
-            bulletListText {
-              id
-              dropdownTitle
-              text
-            }
-            text {
-                raw
+      filter: {
+        location: { eq: "category-page" }
+        type: { eq: "dropdown-chart" }
+      }
+    ) {
+      edges {
+        node {
+          title
+          type
+          location
+          image {
+            file {
+              url
             }
           }
+          bulletListText {
+            id
+            dropdownTitle
+            text
+          }
+          text {
+            raw
+          }
         }
+      }
     }
   }
 `;
@@ -40,9 +43,6 @@ const ParentCategoryDropdownChart = (props) => {
 
   return (
     <div className="">
-      <h2 className="typography__h2 dropdown-chart__title">
-            {title}
-      </h2>
       <div className="homepage__dropdown-banner category-page__dropdown dropdown-chart">
         <img
           className="dropdown-chart__image desktop"
@@ -50,16 +50,15 @@ const ParentCategoryDropdownChart = (props) => {
           alt={image.title}
         />
         <div className="homepage__dropdown-banner__content dropdown-chart__content">
+          <h2 className="typography__h2 dropdown-chart__title">{title}</h2>
           <img
-              className="dropdown-chart__image mobile"
-              src={image.file.url}
-              alt={image.title}
+            className="dropdown-chart__image mobile"
+            src={image.file.url}
+            alt={image.title}
           />
-          {text && 
-              <div className="dropdown-chart__text">
-                  {renderRichText(text)}
-              </div>
-          }
+          {text && (
+            <div className="dropdown-chart__text">{renderRichText(text)}</div>
+          )}
           <Dropdown items={bulletListText} />
         </div>
       </div>

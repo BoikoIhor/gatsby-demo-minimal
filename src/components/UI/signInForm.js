@@ -8,7 +8,7 @@ import Input from "components/UI/input";
 import "styles/auth-form.scss";
 
 const SignInForm = (props) => {
-    const { afterAuth, setIsSignInLayout } = props;
+    const { afterAuth, setIsSignInLayout, isQuestionnaire } = props;
 
     const {
         signInFormData,
@@ -23,7 +23,7 @@ const SignInForm = (props) => {
     return (
         <>
             <h2 className="auth__heading typography__h2">
-                Welcome back
+                { isQuestionnaire ? "Login into your account" : "Welcome back" }
             </h2>
             <p className="auth__description">
                 Fill in your details to access and manage your subscription

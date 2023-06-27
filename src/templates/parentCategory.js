@@ -8,7 +8,6 @@ import ProductSlider from "../components/UI/productSlider";
 import MainLayout from "../components/Layout/main";
 import ParentCategoryHero from "../components/UI/Listpage/parentCategoryHero";
 import HomepageBottomBanner from "../components/UI/Homepage/homepageBottomBanner";
-import TreatmentsSlider from "../components/UI/treatmentsSlider";
 import ParentCategoryDropdown from "../components/UI/Listpage/parentCategoryDropDown";
 import ParentCategoryDropdownFAQ from "../components/UI/Listpage/parentCategoryDropDownFAQ";
 import ParentCategoryDropdownChart from "../components/UI/Listpage/parentCategoryDropDownChart";
@@ -21,6 +20,7 @@ import "styles/homepage.scss";
 
 import { listpageQuery } from "components/UI/Listpage/listpageContent";
 import { GTMSelectItemEvent, GTMViewItemListEvent } from "components/GTM/gtmCategory";
+import BlogSlider from "../components/UI/blogSlider";
 
 const Category = (props) => {
     const { pageContext } = props;
@@ -57,10 +57,9 @@ const Category = (props) => {
             slider.node.location === "homepageFAQ"
     );
 
-    const [ourTreatmentsliderData] = sliders.filter(
+    const [blogSliderData] = sliders.filter(
         (slider) =>
-            slider.node.type === "our-treatments-slider" &&
-            slider.node.location === "homepage"
+            slider.node.type === "blog-slider" && slider.node.location === "product-page"
     );
 
     const getStyle = () => {
@@ -192,7 +191,7 @@ const Category = (props) => {
                     <QuoteSlider sliderData={bottomSliderData.node}/>
                     <HomepageBottomBanner/>
                     <ParentCategoryDropdownFAQ/>
-                    <TreatmentsSlider sliderData={ourTreatmentsliderData.node}/>
+                    <BlogSlider sliderData={blogSliderData.node}/>
                 </div>
             </MainLayout>
         );

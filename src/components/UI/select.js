@@ -6,7 +6,7 @@ import DropdownArrow from "images/svg/dropdownArrow.svg";
 import "styles/select.scss";
 
 const Select = (props) => {
-    const { className, items=[], onChange, name, required, placeholder, ...restProps } = props;
+    const { className, items = [], onChange, name, required, placeholder, ...restProps } = props;
 
     const [selectedItem, setSelectedItem] = useState();
     const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +25,9 @@ const Select = (props) => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-            <div className={"select typography__p" + (className ? ' ' + className : '') + (isOpen ? ' active' : '')} {...restProps}>
+            <div className={"select typography__p" +
+                (className ? ' ' + className : '') +
+                (isOpen ? ' active' : '')} {...restProps}>
                 <div className="select__current" onClick={() => setIsOpen(!isOpen)}>
                     {selectedItem?.name}
                     <img className="select__current-arrow" src={DropdownArrow} alt={isOpen ? "Close" : "Open"}/>
@@ -47,7 +49,7 @@ const Select = (props) => {
                         ))
                     }
                 </ul>
-                <select name={name} required={required} tabIndex={-1} defaultValue={selectedItem?.value}>
+                <select name={name} required={required} tabIndex={-1} value={selectedItem?.value}>
                     {
                         items.map((item, index) => (
                             <option key={index}

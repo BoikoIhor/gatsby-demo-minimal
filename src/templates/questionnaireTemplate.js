@@ -10,11 +10,13 @@ import { useWindow } from "context/windowContext";
 import { useCustomer } from "context/customerContext";
 
 import RadioField from "components/UI/Inputs/RadioField";
+import Checkbox from "components/UI/Inputs/Checkbox";
 import Button from "components/UI/button";
 import CheckoutProvider from "context/checkoutContext";
 import CheckoutSteps from "components/UI/Checkout/checkoutSteps";
 import QuestionnaireProductCard from "components/UI/Questionnaire/questionnaireProductCard";
 import QuestionnaireFileUpload from "components/UI/Questionnaire/questionnaireFileUpload";
+import AuthForm from "components/UI/authForm";
 
 import informationIcon from 'images/svg/information-icon.svg';
 import backButtonIcon from 'images/svg/back-button-icon.svg';
@@ -99,6 +101,11 @@ const QuestionnaireTemplate = ({pageContext}) => {
     }, 1500)
   }
 
+  let checkedChoices = [];
+  const handleSubmitButtonClick = (title, ref, index) => {
+    handleAnswerSelect(title, ref, checkedChoices.join(', '), index);
+  };
+
   const handleAnswerSelect = (questionTitle, questionIndex, answer, answerIndex) => {
     setIsLoading(true);
 
@@ -142,7 +149,7 @@ const QuestionnaireTemplate = ({pageContext}) => {
 
   useEffect(() => {
     setCurrentProduct(products.filter(product => product.variants.some(variant => variant.sku === currentSku)));
-  }, [currentSku, products]);
+  }, [currentSku]);
 
   useEffect(() => {
     console.log("Answers:", answers);
@@ -209,7 +216,7 @@ const QuestionnaireTemplate = ({pageContext}) => {
               if (item.ref === currentQuestionIndex) {
                 return (
                   <div key={item.ref} className={isLoading ? 'display-none' : 'questionnaire__content-wrapper'}>
-                    {(item.type !== 'statement' && item.type !== 'website') && (
+                    {(item.type !== 'statement' && item.type !== 'website' && item.type !== 'email') && (
                       <div>
                         <h2 className="typography__h3 questionnaire__title">
                           {item.title}
@@ -225,17 +232,64 @@ const QuestionnaireTemplate = ({pageContext}) => {
                         </button>
                       </div>
                     )}
-
-                    {item.type === 'multiple_choice' && item.properties?.choices?.map((choice, choiceIndex) => (
-                      <RadioField
-                        key={choiceIndex}
-                        className={'form__radio'}
-                        name={'answer'}
-                        value={choice.label}
-                        required={true}
-                        onChange={() => { handleAnswerSelect(item.title, item.ref, choice.label, choiceIndex) }}
-                      />
-                    ))}
+                    {item.type === 'multiple_choice' && (
+                      <>
+                        {item.properties.allow_multiple_selection ? (
+                          <div className="questionnaire__checkbox">
+                            {item.properties.choices.map((choice, choiceIndex) => (
+                                <Checkbox
+                                  key={choiceIndex}
+                                  className="form__checkbox"
+                                  name="answer"
+                                  value={choice.label}
+                                  required={true}
+                                  onChange={(event) => {
+                                    const isChecked = event.target.checked;
+                                    if (isChecked) {
+                                      checkedChoices.push(choice.label);
+                                    } else {
+                                      const indexToRemove = checkedChoices.indexOf(choice.label);
+                                      if (indexToRemove !== -1) {
+                                        checkedChoices.splice(indexToRemove, 1);
+                                      }
+                                    }
+                                  }}
+                                />
+                            ))}
+                            <Button
+                              className="questionnaire__button"
+                              value="Submit"
+                              type="dark"
+                              isArrowShow={true}
+                              onClick={() => {
+                                handleSubmitButtonClick(item.title, item.ref, 0);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          item.properties.choices.map((choice, choiceIndex) => (
+                            <RadioField
+                              key={choiceIndex}
+                              className="form__radio"
+                              name="answer"
+                              value={choice.label}
+                              required={true}
+                              onChange={() => {
+                                handleAnswerSelect(item.title, item.ref, choice.label, choiceIndex);
+                              }}
+                            />
+                          ))
+                        )}
+                      </>
+                    )}
+                    <div className="questionnaire__image-choice-wrapper">
+                      {item.type === 'picture_choice' && item.properties?.choices?.map((choice, choiceIndex) => (
+                        <div className="questionnaire__image-choice" onClick={() => { handleAnswerSelect(item.title, item.ref, choice.label, choiceIndex) }}>
+                          <img className="questionnaire__image-choice-picture" src={choice.attachment.href} alt={`Choice image ${choiceIndex}`} />
+                          <p className="typography__p">{choice.label}</p>
+                        </div>
+                      ))}
+                    </div>
                     {item.type === 'statement' && (
                       <div>
                         <h2 className="typography__h3 questionnaire__title">{item.title}</h2>
@@ -335,6 +389,30 @@ const QuestionnaireTemplate = ({pageContext}) => {
                         />
                       </div>
                     )}
+                    {item.type === 'email' && (
+                      Object.keys(customerData).length > 0 ? (
+                        <>
+                          <h3 className="typography__h3 questionnaire__title">
+                                Welcome {customerData.first_name} {customerData.last_name}. You're already logged!
+                          </h3>
+                          <Button
+                            className='bottom-banner__button'
+                            value="Continue"
+                            type="dark"
+                            isArrowShow={true}
+                            onClick={() => { handleAnswerSelect(item.title, item.ref, "Client logged", 0) }}
+                          />
+                        </> 
+                      ) : (
+                        <AuthForm
+                          isQuestionnaire
+                          afterAuth={() => {
+                            handleAnswerSelect(item.title, item.ref, "Client logged", 0);
+                          }}
+                        ></AuthForm>
+                      )
+                    )}
+
                     {item.type === 'file_upload' && (
                       <div>
                         <QuestionnaireFileUpload

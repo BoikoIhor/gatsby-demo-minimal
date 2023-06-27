@@ -1,10 +1,13 @@
 import React from "react";
+import { useCustomer } from "context/customerContext";
 
 import AuthForm from "components/UI/authForm";
 import Button from "components/UI/button";
 
 const CheckoutCustomer = (props) => {
-    const { nextStepAction, updateOrder, customerData } = props;
+    const { nextStepAction } = props;
+
+    const { customerData } = useCustomer();
 
     return (
         <div className="checkout-customer">
@@ -14,7 +17,6 @@ const CheckoutCustomer = (props) => {
                 customerData.id &&
                 <Button value="Volgende" type="dark" isArrowShow
                         onClick={() => {
-                            updateOrder('customer_id', customerData.id);
                             nextStepAction()
                         }}/>
             }

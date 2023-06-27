@@ -6,6 +6,7 @@
     align-self: baseline;
     width: 100%;
     gap: 20px;
+    padding: 0 $padding;
 
     @include media-laptop {
         gap: 40px;

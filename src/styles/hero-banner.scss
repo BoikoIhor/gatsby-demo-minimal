@@ -21,7 +21,6 @@
         transform: translateY(-50%);
         padding-left: 16px;
         box-sizing: content-box;
-        max-width: 250px;
 
         @include media-tablet {
             max-width: 350px;
@@ -53,6 +52,7 @@
 
         &__button {
             margin-top: 32px;
+            width: fit-content;
 
             &:hover {
                 @include media-small-laptop {

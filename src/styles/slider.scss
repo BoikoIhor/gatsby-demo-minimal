@@ -16,6 +16,11 @@
 .swiper {
   position: relative;
   overflow: initial;
+
+  &-wrapper {
+    justify-content: space-between;
+  }
+
   @include media-tablet {
     padding: 0 15px 0 0;
   }
@@ -88,49 +93,49 @@
 }
 
 .swiper-pagination-image {
-  height: 45px;
-  width: 45px;
+  height: 26px;
+  width: 26px;
 
-  @include media-tablet {
-    height: 61px;
-    width: 61px;
+  @include media-small-laptop {
+    height: 43px;
+    width: 43px;
   }
 
   img {
     border-radius: 50%;
     background-color: #f9f9f9;
-    height: 45px;
-    width: 45px;
-    object-fit: contain;
+    height: 26px;
+    width: 26px;
+    object-fit: cover;
     border: 2px solid #b2c9cc;
 
-    @include media-tablet {
-      height: 61px;
-      width: 61px;
+    @include media-small-laptop {
+      height: 43px;
+      width: 43px;
     }
   }
 }
 
 .swiper-pagination-image-active {
-  height: 46px;
-  width: 46px;
+  height: 26px;
+  width: 26px;
 
-  @include media-tablet {
-    height: 61px;
-    width: 61px;
+  @include media-small-laptop {
+    height: 43px;
+    width: 43px;
   }
 
   img {
     border-radius: 50%;
     background-color: #f9f9f9;
-    height: 45px;
-    width: 45px;
-    object-fit: contain;
+    height: 26px;
+    width: 26px;
+    object-fit: cover;
     border: 2px solid #004751;
 
-    @include media-tablet {
-      height: 61px;
-      width: 61px;
+    @include media-small-laptop {
+      height: 43px;
+      width: 43px;
     }
   }
 }

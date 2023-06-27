@@ -6,12 +6,12 @@ import Button from "../button";
 import ProductPageFAQ from "./ProductPageFAQ";
 import ProductPageDotsSlider from "./productPageDotsSlider";
 import RoundImageBanner from "../roundImageBanner";
-import TreatmentsSlider from "../treatmentsSlider";
 import ProductSlider from "../productSlider";
 import Dropdown from "../dropdown";
 import { graphql, useStaticQuery } from "gatsby";
 import ProductPageDoctorBanner from "./productPageDoctorBanner";
 import ProductPageReviews from "./productPageReviews";
+import BlogSlider from "../blogSlider";
 
 export const ProductPageContentQuery = graphql`
   query DropdownProductBannerQuery {
@@ -50,6 +50,13 @@ export const ProductPageContentQuery = graphql`
           sliderTitle
           slideCount
           dots
+          sliderButton {
+            text
+            type
+            href
+            isThin
+            isArrowShow
+          }
           slides {
             id
             title
@@ -96,12 +103,6 @@ const ProductPageContent = (props) => {
         slider.node.location === "homepageFAQ"
   );
 
-  const [ourTreatmentsliderData] = productSliderData.filter(
-    (slider) =>
-      slider.node.type === "our-treatments-slider" &&
-      slider.node.location === "homepage"
-  );
-
   const [dotsSliderData] = productSliderData.filter(
     (slider) =>
       slider.node.type === "product-page-dots-slider" &&
@@ -113,31 +114,36 @@ const ProductPageContent = (props) => {
         slider.node.type === "reviews-slider" && slider.node.location === "product-page"
   );
 
+  const [blogSliderData] = productSliderData.filter(
+    (slider) =>
+        slider.node.type === "blog-slider" && slider.node.location === "product-page"
+  );
+
   const [dropdownBanner] = banners.filter(
     (banner) =>
-      banner.node.location === "productpage" && 
+      banner.node.location === "productpage" &&
       banner.node.type === "dropdown"
   );
 
   const [howItWorksData] = banners.filter(
     (banner) =>
-      banner.node.location === "product-page" && 
+      banner.node.location === "product-page" &&
       banner.node.type === "how-it-works"
   );
-  
+
   const faqType = product.custom_fields.find(
     (el) => el.name === "faq_type"
   );
 
   const [FAQBannerData] = banners.filter(
     (banner) =>
-      banner.node.location === "product-page" && 
+      banner.node.location === "product-page" &&
       banner.node.type === faqType?.value
   );
 
   const [DoctorHelpBannerData] = banners.filter(
     (banner) =>
-      banner.node.location === "product-page" && 
+      banner.node.location === "product-page" &&
       banner.node.type === "not-sure-banner"
   );
 
@@ -150,7 +156,7 @@ const ProductPageContent = (props) => {
     doctorsHelpLink = "/questionnaire-erectile-dysfunction";
 
   DoctorHelpBannerData.node.title = DoctorHelpBannerData.node.title.replace("{product-name}", product.name);
-  
+
   const { title, bulletListText } = dropdownBanner.node;
 
   return (
@@ -172,7 +178,7 @@ const ProductPageContent = (props) => {
       </div>
 
       <div className="product-page__dots-slider">
-        <p className="typography__h2 product-page__dropdown-title">{dotsSliderData.node.sliderTitle}</p>
+        <p className="typography__h2 product-page__dots-slider-title">{dotsSliderData.node.sliderTitle}</p>
         <ProductPageDotsSlider slides={dotsSliderData.node} />
       </div>
 
@@ -219,8 +225,7 @@ const ProductPageContent = (props) => {
       { faqType && (
         <ProductPageFAQ banner={FAQBannerData.node}/>
       )}
-
-      <TreatmentsSlider sliderData={ourTreatmentsliderData.node}/>
+      <BlogSlider sliderData={blogSliderData.node}/>
 
       { relatedProducts.length > 0 && (
         <div className="related-products">

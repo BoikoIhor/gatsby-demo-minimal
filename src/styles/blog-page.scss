@@ -37,7 +37,7 @@
     align-items: center;
 
     @include media-laptop {
-      padding: 52px;
+      padding: 52px 25%;
     }
 
     &--title {
@@ -214,5 +214,8 @@
         }
       }
     }
+  }
+  .product-slider{
+    width: calc(200% - 40px);
   }
 }

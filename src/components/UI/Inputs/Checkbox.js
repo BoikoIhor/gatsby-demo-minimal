@@ -6,6 +6,7 @@ const Checkbox = ({
   required,
   elementId,
   value,
+  onChange
 }) => {
   return (
     <label htmlFor={elementId} className={className}>
@@ -14,6 +15,7 @@ const Checkbox = ({
         type='checkbox'
         name={name}
         required={required}
+        onChange={onChange}
       />
       <div className='checkbox'>
         <svg width='20px' height='20px' viewBox='0 0 20 20'>

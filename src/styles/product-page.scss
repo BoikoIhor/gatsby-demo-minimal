@@ -50,62 +50,63 @@
     justify-content: center;
     background: #f9f9f9;
     border-radius: 30px;
-    max-width: 748px;
+    height: fit-content;
 
     @include media-tablet {
+      width: 44%;
+    }
+
+    @include media-laptop {
+      width: 100%;
+      max-width: 748px;
       max-height: 525px;
     }
 
     .swiper {
-      padding: 40px 45px;
-      max-width: 360px;
-      max-height: 480px;
+      width: calc(100% + 1px);
       overflow: hidden;
       display: flex;
       align-items: center;
-
-      @include media-tablet {
-        max-width: 300px;
-        max-height: 500px;
-      }
+      border-radius: 30px;
 
       @include media-laptop {
-        max-width: 450px;
-        max-height: 700px;
+        max-width: unset;
       }
     }
 
     .swiper-wrapper {
       display: flex;
       align-items: center;
-      height: 500px;
     }
 
     .swiper-slide {
       background: #f9f9f9;
       width: 100%;
-      max-width: 400px;
       display: flex;
       justify-content: center;
       align-items: center;
+      border-radius: 30px;
     }
 
     .swiper-slide img {
       display: block;
       width: 100%;
-      max-width: 500px;
-      max-height: 300px;
-      object-fit: contain;
+      object-fit: cover;
+      border-radius: 30px;
     }
 
     & .swiper.swiper-initialized .swiper-pagination {
       display: flex;
       justify-content: center;
       gap: 8px;
-      bottom: 29px !important;
+      bottom: 16px !important;
 
       @include media-tablet {
         gap: 13px;
+      }
+
+      @include media-laptop {
+        bottom: 29px !important;
       }
 
       &-bullet {
@@ -160,7 +161,6 @@
 
     @include media-desktop {
       max-width: unset;
-
     }
   }
 
@@ -256,8 +256,17 @@
     }
   }
 
-  &__dots-slider{
+  &__dots-slider {
     width: 100%;
+
+    &-title {
+      padding: 0 $padding;
+      margin-bottom: 0;
+
+      @include media-tablet {
+        margin-bottom: 23px;
+      }
+    }
   }
 
   &__radio {
@@ -371,6 +380,7 @@
     top: 46px;
     left: 16px;
     max-width: 290px;
+    padding: 0 $padding;
 
     @include media-tablet {
       max-width: 523px;
@@ -409,6 +419,7 @@
     width: 123px;
     bottom: 20px;
     left: 19px;
+    margin: $padding;
 
     @include media-tablet {
       bottom: 33px;
@@ -461,6 +472,11 @@
   }
 
   &__doctor {
+    &-banner {
+        width: 100%;
+        padding: 0 $padding;
+    }
+
     &-background {
       @include display-flex;
       background-color: $background-light-blue;
@@ -544,6 +560,7 @@
       margin-bottom: 20px;
       @include display-flex;
       justify-content: space-between;
+      padding: 0 $padding;
 
       @include media-tablet {
         flex-direction: row;
@@ -604,6 +621,7 @@
     &.swiper-container {
       width: 100%;
       height: 520px;
+      padding: 0 $padding;
 
       @include media-tablet {
         height: 540px;
@@ -623,7 +641,7 @@
         background-color: $white;
         box-shadow: rgba(0, 0, 0, 0) 0 8px 0;
         position: relative;
-        border-radius: 20px;
+        border-radius: 30px;
         overflow: hidden;
       }
 
@@ -697,6 +715,7 @@
     position: relative;
     width: 100%;
     min-height: 379px;
+    padding: 0 $padding;
 
     @include media-tablet {
       margin-top: 60px;
@@ -884,7 +903,6 @@
   &__dropdown {
     position: absolute;
     background-color: $white;
-    background-color: red;
     box-shadow: 0 0 5px rgb(204, 204, 204);
     width: 100%;
     left: 0;
@@ -912,6 +930,7 @@
   width: 100%;
   align-items: flex-start;
   gap: 20px;
+  padding: 0 $padding;
 
   @include media-tablet {
     gap: 20px;

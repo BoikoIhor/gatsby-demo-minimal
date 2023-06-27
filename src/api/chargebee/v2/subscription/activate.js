@@ -14,31 +14,36 @@ export default async function handler(req, res) {
 }
 
 /**
- * Resume paused subscription
+ * Update future subscription
  *
  * Chargebee documentation:
- * https://apidocs.chargebee.com/docs/api/subscriptions?prod_cat_ver=2&lang=node#resume_a_subscription
+ * https://apidocs.chargebee.com/docs/api/subscriptions?prod_cat_ver=2#update_subscription_for_items
  * @param req
  * @param res
  * @returns {Promise<void>}
  */
 const postRequest = async (req, res) => {
     chargebee.subscription
-        .resume(req.body.subscription_id, {
-            resume_option : "immediately",
-            unpaid_invoices_handling : "schedule_payment_collection"
+        .update_for_items(req.body.id, {
+            invoice_immediately: true,
+            start_date: 0, // set zero date to start the subscription immediately
         })
         .request()
         .then((response) => {
-            res.status(200);
-            let result = {
-                subscription: response.subscription,
-                customer: response.customer,
-                card: response.card,
-                invoice: response.invoice,
-                unbilled_charges: response.unbilled_charges
-            };
-            res.json({result: result});
+            chargebee
+                .subscription.charge_future_renewals(req.body.id)
+                .request()
+                .then((response) => {
+                    res.status(200);
+                    let result = {
+                        subscription: response.subscription,
+                        customer: response.customer,
+                        card: response.card,
+                        invoice: response.invoice,
+                        unbilled_charges: response.unbilled_charges
+                    };
+                    res.json({result: result});
+                });
         })
         .catch((error) => {
             res.status(500);

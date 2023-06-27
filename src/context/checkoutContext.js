@@ -11,6 +11,7 @@ const CheckoutProvider = ({ children }) => {
     const [order, setOrder] = useState();
     const [shippingZones, setShippingZones] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [orderStatuses, setOrderStatuses] = useState([]);
 
     const updateOrder = (key, value) => {
         setOrder((oldOrder) => {
@@ -21,23 +22,25 @@ const CheckoutProvider = ({ children }) => {
         })
     }
 
-    const getShippingZonesRequest = async () => {
-        const response =
-            await axios.get("/api/v2/shipping/zones");
-
-        setShippingZones(response.data);
+    const getShippingZonesRequest = () => {
+        axios.get("/api/v2/shipping/zones")
+             .then(response => setShippingZones(response.data));
     }
 
-    const getCountriesRequest = async () => {
-        const response =
-            await axios.get("/api/v2/countries");
+    const getCountriesRequest = () => {
+        axios.get("/api/v2/countries")
+            .then(response => setCountries(response.data));
+    }
 
-        setCountries(response.data);
+    const getOrderStatusesRequest = () => {
+        axios.get("/api/v2/order_statuses")
+             .then(response => setOrderStatuses(response.data));
     }
 
     useEffect(() => {
         getShippingZonesRequest();
         getCountriesRequest();
+        getOrderStatusesRequest();
     }, [])
 
     return (
@@ -46,7 +49,8 @@ const CheckoutProvider = ({ children }) => {
                 order,
                 updateOrder,
                 shippingZones,
-                countries
+                countries,
+                orderStatuses
             }}
         >
             {children}

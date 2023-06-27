@@ -16,17 +16,17 @@ export default async function handler(req, res) {
 }
 
 /**
- * Resume paused subscription
+ * Cancel current subscription
  *
  * Chargebee documentation:
- * https://apidocs.chargebee.com/docs/api/subscriptions?prod_cat_ver=2&lang=node#resume_a_subscription
+ * https://apidocs.chargebee.com/docs/api/subscriptions?prod_cat_ver=2#cancel_subscription_for_items
  * @param req
  * @param res
  * @returns {Promise<void>}
  */
 const postRequest = async (req, res) => {
     chargebee.subscription
-        .cancel_for_items(req.body.subscription_id, {
+        .cancel_for_items(req.body.id, {
             credit_option_for_current_term_charges: "prorate",
             end_of_term: false
         })

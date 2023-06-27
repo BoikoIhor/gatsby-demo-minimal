@@ -62,31 +62,6 @@ const postRequest = async (req, res) => {
             res.status(403).json(JSON.stringify("Error: Please, fill the registration form."));
         }
 
-        let chargebee_id;
-        let customerChargebeeData = {
-            email: req.body.email,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name
-        }
-
-        const chargebeeCustomerRequestData = {
-            method: "POST",
-            url: process.env.GATSBY_APP_URL + "/api/chargebee/v2/customers",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            data: customerChargebeeData,
-        }
-
-        //TODO: create ChargeBee customer
-        const responseChargebeeCustomer = await axios(chargebeeCustomerRequestData);
-        console.log('responseChargebeeCustomer: ', responseChargebeeCustomer.data.result);
-        if (responseChargebeeCustomer.data.result) {
-            chargebee_id = responseChargebeeCustomer.data.result.id;
-        }
-
         const customerData = {
             "email": req.body.email,
             "first_name": req.body.first_name,
@@ -94,9 +69,7 @@ const postRequest = async (req, res) => {
             "authentication": {
                 "force_password_reset": false,
                 "new_password": req.body.password
-            },
-            "origin_channel_id": 1,
-            "channel_ids": [1]
+            }
         }
 
         const requestData = {
@@ -106,42 +79,16 @@ const postRequest = async (req, res) => {
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Content-Type": "application/json",
-                Accept: "application/json",
+                "Accept": "application/json",
                 "X-Auth-Token": process.env.BIGCOMMERCE_API_ACCESS_TOKEN,
             },
             data: [customerData],
         };
 
         const response = await axios(requestData);
-        console.log('response:', response);
-        // response.data.data.forEach(customer => {
-        //     customer.id = encrypt(customer.id.toString());
-        // });
 
-        console.log('response.data.data: ', response.data[0]);
-
-        if (response.data) {
-            const formFieldRequestData = {
-                method: "POST",
-                url: process.env.GATSBY_APP_URL + "/api/chargebee/v2/customers/form-field-values",
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                data: [{
-                    "name": "chargebee_id",
-                    "value": chargebee_id,
-                    "customer_id": response.data[0].id
-                }]
-            }
-            const formFieldsResponse = await axios(formFieldRequestData);
-            console.log('formFieldsResponse', formFieldsResponse.data);
-
-        }
-
-        res.status(response.status).json(response.data);
-
+        res.status(response.status)
+           .json(response.data.data ? response.data.data : response.data)
     } catch (error) {
         const statusCode = error.response ? error.response.status : 500;
         const errorMessage = error.response ? error.response.data : error.toString();
@@ -151,7 +98,7 @@ const postRequest = async (req, res) => {
 }
 
 /**
- * Update Customer By Id
+ * Update Customers
  *
  * BigCommerce documentation:
  * https://developer.bigcommerce.com/docs/rest-management/customers#update-customers
@@ -167,7 +114,7 @@ const putRequest = async (req, res) => {
 }
 
 /**
- * Delete Customer By Id
+ * Delete Customers
  *
  * BigCommerce documentation:
  * https://developer.bigcommerce.com/docs/rest-management/customers#delete-customers

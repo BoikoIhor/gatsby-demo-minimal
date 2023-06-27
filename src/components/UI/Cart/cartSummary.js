@@ -1,12 +1,16 @@
 import React from "react";
 import { useCart } from "context/cartContext";
 import { useCurrency } from "context/currencyContext";
+import { useCheckout } from "context/checkoutContext";
 
 const CartSummary = (props) => {
     const { ActionButtons } = props;
 
-    const { cartTotal, shippingAmount } = useCart();
+    const { cartTotal } = useCart();
+    const { order } = useCheckout();
     const { currency } = useCurrency();
+
+    const shippingCost = order?.base_shipping_cost
 
     return (
         <section className="cart__summary">
@@ -17,10 +21,10 @@ const CartSummary = (props) => {
                         <span className="cart__summary-item-value">{cartTotal} {currency.token}</span>
                     </div>
                     {
-                        typeof shippingAmount !== 'undefined' && (
+                        shippingCost !== null && shippingCost !== undefined && (
                             <div className="cart__summary-item typography__small">
                                 <span className="cart__summary-item-label">Verzending</span>
-                                <span className="cart__summary-item-value">{shippingAmount} {currency.token}</span>
+                                <span className="cart__summary-item-value">{shippingCost} {currency.token}</span>
                             </div>
                         )
                     }
@@ -28,8 +32,9 @@ const CartSummary = (props) => {
                 <div className="cart__summary-total">
                     <div className="cart__summary-item typography__p">
                         <span className="cart__summary-item-label">Totaal</span>
-                        <span
-                            className="cart__summary-item-value">{cartTotal + (shippingAmount ?? 0)} {currency.token}</span>
+                        <span className="cart__summary-item-value">
+                            {cartTotal + (shippingCost ?? 0)} {currency.token}
+                        </span>
                     </div>
                     <div className="cart__summary-item typography__small">
                         <span className="cart__summary-item-label">Inclusief btw</span>

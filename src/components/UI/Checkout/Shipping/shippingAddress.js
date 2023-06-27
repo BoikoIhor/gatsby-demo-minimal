@@ -6,12 +6,13 @@ const ShippingForm = lazy(() => import('components/UI/Checkout/Shipping/shipping
 
 const ShippingAddress = (props) => {
     const {
+        customerData,
         shippingAddress,
         setShippingAddress,
         setBillingAddress,
         isShippingEdit,
         setIsBillingEdit,
-        setIsShippingEdit
+        setIsShippingEdit,
     } = props;
 
     return (
@@ -22,9 +23,11 @@ const ShippingAddress = (props) => {
                     isShippingEdit ? (
                         <ShippingEdit
                             shippingAddress={shippingAddress}
-                            setIsShippingEdit={setIsShippingEdit}/>
+                            setIsShippingEdit={setIsShippingEdit}
+                        />
                     ) : (
                         <ShippingForm
+                            customerData={customerData}
                             shippingAddress={shippingAddress}
                             setShippingAddress={setShippingAddress}
                             setBillingAddress={setBillingAddress}

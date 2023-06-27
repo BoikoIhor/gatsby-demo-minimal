@@ -3,6 +3,7 @@ import { useStaticQuery, graphql, navigate, Link } from "gatsby";
 import useHeader from "hooks/useHeader";
 import { useCart } from "context/cartContext";
 import { useCustomer } from "context/customerContext";
+import { useWindow } from "context/windowContext";
 
 import Button from "components/UI/button";
 import Megamenu from "components/UI/megamenu";
@@ -11,9 +12,7 @@ import AuthForm from "components/UI/authForm";
 import Image from "components/UI/image";
 import AsidePopup from "components/UI/asidePopup";
 import AsideBanner from "components/UI/asideBanner";
-
 import "styles/header.scss";
-import { useWindow } from "../../context/windowContext";
 
 export const headerQuery = graphql`
   query {
@@ -119,7 +118,9 @@ const Header = (props) => {
 
   const handleClick = () => {
       const element = document.getElementById("treatments-slider");
-      element.scrollIntoView({ behavior:"smooth", block: "center" });
+      element ?
+          element.scrollIntoView({ behavior: "smooth", block: "center" }) :
+          navigate(headerButton?.href);
   }
 
   return (

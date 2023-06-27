@@ -14,6 +14,13 @@ export const categoryDropdownBannerQuery = graphql`
             type
             location
             image {
+              title
+              file {
+                url
+              }
+            }
+            imageMobile {
+              title
               file {
                 url
               }
@@ -36,7 +43,7 @@ const ParentCategoryDropdown = (props) => {
   const queryData = useStaticQuery(categoryDropdownBannerQuery);
   const banner = queryData.allContentfulBannerUpdated.edges[0].node;
 
-  const { title, text, image, bulletListText } = banner;
+  const { title, text, image, imageMobile, bulletListText } = banner;
 
   return (
     <div className="homepage__dropdown-banner category-page__dropdown">
@@ -51,8 +58,8 @@ const ParentCategoryDropdown = (props) => {
         }
         <img
             className="dropdown-chart__image mobile mb-20"
-            src={image.file.url}
-            alt={image.title}
+            src={imageMobile.file.url}
+            alt={imageMobile.title}
         />
         <Dropdown items={bulletListText} />
       </div>

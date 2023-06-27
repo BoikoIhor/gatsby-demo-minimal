@@ -10,6 +10,7 @@
   &__title {
     @extend .typography__h2;
     margin-bottom: 18px;
+    padding: 0 $padding;
 
     @include media-laptop {
       margin-bottom: 40px;
@@ -27,59 +28,81 @@
 
     .swiper-wrapper {
       margin-bottom: 45px;
+      display: flex;
+
+      .swiper-slide {
+        @include media-laptop {
+          width: 30% !important;
+          display: flex;
+          align-self: stretch;
+          height: auto;
+        }
+      }
     }
 
     .FAQ-slide {
-        display: flex;
-        flex-direction: column;
-        gap: 26px;
-        background: $white;
-        padding: 20px;
-        border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      background: $white;
+      padding: 20px;
+      border-radius: 15px;
+      height: 450px;
+
+      @include media-tablet {
+        height: 400px;
+      }
+
+      @include media-laptop {
         height: 450px;
-        
-        @include media-tablet {
-          height: 400px;
-        }
+      }
+
+      @include media-desktop {
+        height: auto;
+      }
+
+      &__image-container {
+        background: none;
+        border-radius: 25px;
+        overflow: hidden;
+        height: 213px;
 
         @include media-laptop {
-          height: 450px;
+          width: 100%;
+          height: 265px;
         }
 
-        &__image-container {
-            background: none;
-            border-radius: 25px;
-            overflow: hidden;
-            height: 213px;
-
-            @include media-laptop {
-                width: 100%;
-                height: 265px;
-            }
+        @include media-desktop {
+          height: auto;
         }
+      }
 
-        &__image {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-            margin-bottom: 37px;
+      &__image {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        margin-bottom: 37px;
+      }
+
+      &__title {
+        @extend .typography__title;
+        margin-bottom: 10px;
+
+        @include media-laptop {
+          margin-bottom: 22px;
         }
-
-        &__title {
-            @extend .typography__title;
-            margin-bottom: 10px;
-
-            @include media-laptop {
-                margin-bottom: 22px;
-            }
-            @include media-desktop {
-                font-size: 28px;
-            }
+        @include media-desktop {
+          font-size: 28px;
         }
+      }
 
-        &__subtext {
-            font-family: $gordita-regular;
-        }
+      &__subtext {
+        font-family: $gordita-regular;
+
+        // @include media-desktop {
+        //   min-height: 72px;
+        // }
+      }
     }
   }
 
@@ -87,12 +110,13 @@
     padding-left: 0;
 
     .swiper {
-      padding: 0;
+      padding: 0 $padding;
     }
   }
 }
 
-.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet, .swiper-pagination-horizontal.swiper-pagination-bullets {
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets {
   display: flex;
   align-items: center;
   justify-content: center;

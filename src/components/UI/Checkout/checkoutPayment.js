@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { navigate } from "gatsby";
+import { useWindow } from "context/windowContext";
+import { useCurrency } from "context/currencyContext";
+import { useCustomer } from "context/customerContext";
+import { useCart } from "context/cartContext";
+import { useCheckout } from "context/checkoutContext";
 
 import useChargebee from "hooks/Checkout/useChargebee";
 
 import Button from "components/UI/button";
 import CartSummary from "components/UI/Cart/cartSummary";
 import Methods from "components/UI/Checkout/Payment/methods";
-import { GTMPaymentFailedEvent } from "components/GTM/gtmCheckout";
+import { GTMPaymentFailedEvent, GTMPurchaseEvent } from "components/GTM/gtmCheckout";
+import { removeEmpty } from "utils/helper";
 
 const CheckoutPayment = (props) => {
-    const {
-        nextStepAction,
-        gtmEvent,
-        window,
-        order,
-        cartItems,
-        removeCart,
-        customerData,
-        localProducts
-    } = props;
+    const { nextStepAction } = props;
+
+    const { currency } = useCurrency();
+    const { window } = useWindow();
+    const { order, orderStatuses } = useCheckout();
+    const { cartItems, cartTotal, localProducts } = useCart();
+    const { customerData } = useCustomer();
 
     const [createdOrder, setCreatedOrder] = useState();
     const [paymentMethods, setPaymentMethods] = useState();
@@ -28,10 +31,34 @@ const CheckoutPayment = (props) => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState();
     const [isPlaceOrder, setIsPlaceOrder] = useState(false);
     const [isSavePaymentMethod, setIsSavePaymentMethod] = useState(false);
-    const [paymentStatuses, setPaymentStatuses] = useState();
-    const [currentPaymentStatus, setCurrentPaymentStatus] = useState();
 
     const { paymentIntent, chargebeeInitialized, additionalData } = useChargebee(order);
+
+    useEffect(() => {
+        const incompleteStatus = orderStatuses.find(status => status.system_label === "Incomplete")
+        axios
+            .post("/api/v2/orders", { ...removeEmpty(order), status_id: incompleteStatus.id })
+            .then(async ({ data: order }) => {
+                setCreatedOrder(order)
+
+                await axios
+                    .get("/api/v3/payments/methods", {
+                        params: {
+                            order_id: order.id
+                        }
+                    })
+                    .then(({ data: paymentMethods }) => {
+                        setPaymentMethods(paymentMethods);
+                        setSelectedPaymentMethod(paymentMethods[0].id)
+                    })
+                    .catch(error => {
+                        toast.error(error.message);
+                    })
+            })
+            .catch(error => {
+                toast.error(error.message);
+            })
+    }, [])
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -46,18 +73,9 @@ const CheckoutPayment = (props) => {
             expiryYear: +`20${expiryDate.split(' / ')[1]}`,
         };
 
-        await axios.post("/api/zendesk/create_deal", {
-            createdOrder,
-            order,
-            customerData,
-            subscription_id: 100500,
-            questionnaire_pdf_url: localStorage.getItem('questionnaire_file_url')
-        });
-
         toast.loading('Order is creating...', { toastId: 'order' });
 
-        const awaitingPaymentStatus = paymentStatuses.find(status => status.system_label === "Awaiting Payment")
-        setCurrentPaymentStatus(awaitingPaymentStatus)
+        const awaitingPaymentStatus = orderStatuses.find(status => status.system_label === "Awaiting Payment")
         await axios
             .put("api/v2/orders/order_id", {
                 status_id: awaitingPaymentStatus.id
@@ -93,28 +111,34 @@ const CheckoutPayment = (props) => {
                     }, {
                         change: function (paymentIntent) {
                             // Triggers on each step transition
-                            console.log('change', paymentIntent);
+                            // console.log('change', paymentIntent);
                         },
                         success: async function (paymentIntent) {
                             // Triggers when card is 3DS authorized
-                            console.log('success', paymentIntent);
+                            // console.log('success', paymentIntent);
                             threeDSHandler.updatePaymentIntent(paymentIntent);
                             // TODO: save customer payment data
 
                             const products = []
                             cartItems.forEach(cartItem =>
-                                products.push({
-                                    item_price_id: localProducts[cartItem.variant_id]
-                                        .variants.find(variant => variant.id === cartItem.variant_id)
-                                        .option_values.find(option => option.option_display_name === "Subscription")
-                                        .label.toLowerCase().replaceAll(' ', '-'),
-                                    unit_price: localProducts[cartItem.variant_id]
-                                        .variants.find(variant => variant.id === cartItem.variant_id)
-                                        .price * 100,
-                                    isPrescription: localProducts[cartItem.variant_id]
-                                        .custom_fields.find(field => field.name === "Prescription")
-                                        .value === "true"
-                                })
+                                products.push(
+                                    localProducts[cartItem.variant_id].variants ? {
+                                        item_price_id: localProducts[cartItem.variant_id]
+                                            .variants.find(variant => variant.id === cartItem.variant_id)
+                                            .option_values.find(option => option.option_display_name === "Subscription")
+                                            .label.toLowerCase().replaceAll(' ', '-'),
+                                        unit_price: localProducts[cartItem.variant_id]
+                                            .variants.find(variant => variant.id === cartItem.variant_id)
+                                            .price * 100 * cartItem.quantity,
+                                        isPrescription: localProducts[cartItem.variant_id]
+                                            .custom_fields.find(field => field.name === "Prescription")
+                                            .value === "true"
+                                    } : {
+                                        item_price_id: cartItem.variant_id,
+                                        unit_price: localProducts[cartItem.variant_id].price * 100 * cartItem.quantity,
+                                        isPrescription: false
+                                    }
+                                )
                             )
 
                             const getSubscriptionData = (isPrescription) => {
@@ -155,7 +179,7 @@ const CheckoutPayment = (props) => {
                             getSubscriptionData(false) && await axios
                                 .post("/api/chargebee/v2/subscription", getSubscriptionData(false))
                                 .then(response => {
-                                    gtmEvent({
+                                    purchaseEvent({
                                         transaction_id: response.data.subscription.id,
                                         shipping: createdOrder.shipping_cost_inc_tax,
                                         tax: createdOrder.total_tax,
@@ -168,7 +192,7 @@ const CheckoutPayment = (props) => {
                                 .then(async response => {
                                     subscription = response.data.subscription;
 
-                                    gtmEvent({
+                                    purchaseEvent({
                                         transaction_id: subscription.id,
                                         shipping: createdOrder.shipping_cost_inc_tax,
                                         tax: createdOrder.total_tax,
@@ -188,7 +212,7 @@ const CheckoutPayment = (props) => {
                                 })
 
                             toast.success('Order placed!', { toastId: 'order' });
-                            removeCart();
+
                             navigate(`/thank-you?orderId=${createdOrder.id}`);
                         },
                         error: function (paymentIntent, error) {
@@ -213,6 +237,27 @@ const CheckoutPayment = (props) => {
         nextStepAction()
     }
 
+    const purchaseEvent = (gtmData) => {
+        GTMPurchaseEvent({
+            currency: currency.currency_code,
+            value: cartTotal,
+            coupon: "",
+            items: [
+                ...cartItems.map((item) => ({
+                    item_id: item.product_id,
+                    item_name: item.name,
+                    // discount: 5.99,
+                    // item_brand: getBrandNameById(product.brand_id),
+                    // item_category: getCategoryNameById(categoryId),
+                    item_variant: item.variant_id,
+                    price: item.sale_price,
+                    quantity: item.quantity,
+                }))
+            ],
+            ...gtmData
+        });
+    }
+
     return (
         <div className="checkout-payment">
             <div className="checkout-payment__content">
@@ -227,18 +272,12 @@ const CheckoutPayment = (props) => {
                     <form onSubmit={onSubmit} className="checkout-payment__content-form">
                         <Methods
                             paymentMethods={paymentMethods}
-                            setPaymentMethods={setPaymentMethods}
                             selectedPaymentMethod={selectedPaymentMethod}
                             setSelectedPaymentMethod={setSelectedPaymentMethod}
-                            order={order}
-                            cartItems={cartItems}
-                            setCreatedOrder={setCreatedOrder}
                             setIsPlaceOrder={setIsPlaceOrder}
                             customerData={customerData}
                             isSavePaymentMethod={isSavePaymentMethod}
                             setIsSavePaymentMethod={setIsSavePaymentMethod}
-                            setPaymentStatuses={setPaymentStatuses}
-                            setCurrentPaymentStatus={setCurrentPaymentStatus}
                         />
                         <Button className="checkout-payment__button"
                                 value="Place order" type="dark"

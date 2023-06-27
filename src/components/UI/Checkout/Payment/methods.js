@@ -1,6 +1,4 @@
-import React, { lazy, useMemo, Suspense, useEffect } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React, { lazy, useMemo, Suspense } from "react";
 
 import RadioField from "components/UI/Inputs/RadioField";
 import Loader from "components/UI/loader";
@@ -8,58 +6,14 @@ import Loader from "components/UI/loader";
 const Methods = props => {
     const {
         paymentMethods,
-        setPaymentMethods,
         selectedPaymentMethod,
         setSelectedPaymentMethod,
-        order,
-        cartItems,
-        setCreatedOrder,
         setIsPlaceOrder,
         customerData,
         isSavePaymentMethod,
         setIsSavePaymentMethod,
-        setPaymentStatuses,
-        setCurrentPaymentStatus
     } = props;
     const GATSBY_BIGCOMMERCE_STOREFRONT_URL = process.env.GATSBY_BIGCOMMERCE_STOREFRONT_URL;
-
-    useEffect(() => {
-        (async () => {
-            let paymentStatuses = []
-            await axios
-                .get("/api/v2/order_statuses")
-                .then(({ data }) => {
-                    setPaymentStatuses(data)
-                    paymentStatuses = data
-                })
-
-            const incompleteStatus = paymentStatuses.find(status => status.system_label === "Incomplete")
-
-            setCurrentPaymentStatus(incompleteStatus)
-            await axios
-                .post("/api/v2/orders", { ...order, status_id: incompleteStatus.id })
-                .then(async ({ data: order }) => {
-                    setCreatedOrder(order)
-
-                    await axios
-                        .get("/api/v3/payments/methods", {
-                            params: {
-                                order_id: order.id
-                            }
-                        })
-                        .then(({ data: paymentMethods }) => {
-                            setPaymentMethods(paymentMethods);
-                            setSelectedPaymentMethod(paymentMethods[0].id)
-                        })
-                        .catch(error => {
-                            toast.error(error.message);
-                        })
-                })
-                .catch(error => {
-                    toast.error(error.message);
-                })
-        })();
-    }, [order, cartItems])
 
     const PaymentComponent = useMemo(() => {
         return selectedPaymentMethod ?

@@ -89,8 +89,9 @@ const MollieCard = (props) => {
 MollieCard.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
-    isPlaceOrder: PropTypes.bool.isRequired,
-    setIsPlaceOrder: PropTypes.func.isRequired
+    setIsPlaceOrder: PropTypes.func.isRequired,
+    isSavePaymentMethod: PropTypes.bool.isRequired,
+    setIsSavePaymentMethod: PropTypes.func.isRequired
 }
 
 MollieCard.defaultProps = {

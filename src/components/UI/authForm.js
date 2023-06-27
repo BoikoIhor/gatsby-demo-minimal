@@ -11,7 +11,7 @@ const SignInForm = lazy(() => import('components/UI/signInForm'));
 const SignUpForm = lazy(() => import('components/UI/signUpForm'));
 
 const AuthForm = (props) => {
-    const { afterAuth, children } = props;
+    const { afterAuth, children, isQuestionnaire } = props;
     const { customer, customerData, removeCustomer } = useCustomer()
 
     const [isSignInLayout, setIsSignInLayout] = useState(true);
@@ -35,7 +35,7 @@ const AuthForm = (props) => {
                     <>
                         <Suspense fallback={<Loader/>}>
                             {isSignInLayout ?
-                                <SignInForm afterAuth={afterAuth} setIsSignInLayout={setIsSignInLayout}/> :
+                                <SignInForm afterAuth={afterAuth} setIsSignInLayout={setIsSignInLayout} isQuestionnaire={isQuestionnaire}/> :
                                 <SignUpForm afterAuth={afterAuth} setIsSignInLayout={setIsSignInLayout}/>
                             }
                         </Suspense>

@@ -15,6 +15,10 @@
 
     & &__wrapper {
         margin-top: 50px;
+
+        @include media-tablet {
+            margin-top: 0;
+        }
     }
 
     &__wrapper {

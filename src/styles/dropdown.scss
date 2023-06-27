@@ -52,6 +52,7 @@
 
       &__title {
         @extend .typography__subtitle;
+        line-height: 50px;
 
         @include media-desktop {
           font-size: 28px;

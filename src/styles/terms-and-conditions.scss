@@ -7,7 +7,7 @@
         border-radius: 30px;
 
         @include media-laptop {
-            padding: 52px $padding;
+            padding: 52px 25%;
         }
     }
 

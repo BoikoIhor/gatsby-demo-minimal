@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useCart } from "context/cartContext";
+import { useCurrency } from "context/currencyContext";
 
 import CartProduct from "components/UI/Cart/cartProduct";
 import CartSummary from "components/UI/Cart/cartSummary";
@@ -6,22 +8,15 @@ import { GTMViewCartEvent } from "components/GTM/gtmCart";
 
 const CartContent = (props) => {
     const {
-        ActionButtons,
-        isCheckout,
-        cartItems,
-        cartQty,
-        cartTotal,
         isCartOpen,
-        currency,
-        updateOrder
+        ActionButtons,
     } = props;
 
-    const gtmEvent = (isCartOpen, cartTotal, cartItems) => {
-        if ((!isCartOpen && !isCheckout)) {
-            return;
-        }
+    const { cartTotal, cartQty, cartItems } = useCart();
+    const { currency } = useCurrency();
 
-        if (!Object.keys(currency).length || !cartTotal) {
+    useEffect(() => {
+        if (!isCartOpen) {
             return;
         }
 
@@ -41,27 +36,7 @@ const CartContent = (props) => {
                 }))
             ],
         });
-    }
-
-    useEffect(() => {
-        if (!updateOrder || !cartItems) {
-            return;
-        }
-
-        updateOrder('products', [
-            ...cartItems.map((item) => {
-                return {
-                    product_id: item.product_id,
-                    quantity: item.quantity,
-                    variant_id: item.variant_id
-                }
-            })
-        ])
-    }, [cartItems]);
-
-    useEffect(() => {
-        gtmEvent(isCartOpen, cartTotal, cartItems)
-    }, [isCartOpen, cartTotal]);
+    }, [isCartOpen]);
 
     return (
         cartQty === 0 ?

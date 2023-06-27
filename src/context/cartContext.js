@@ -25,7 +25,6 @@ const CartProvider = ({ children }) => {
 
     const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
     const [cartData, setCartData] = useState({});
-    const [shippingAmount, setShippingAmount] = useState();
     const [localProducts, setLocalProducts] = useState(JSON.parse(localStorage.getItem("localProducts")) ?? {});
 
     const cartItems = useMemo(() => cartData?.line_items?.physical_items, [cartData]);
@@ -51,7 +50,10 @@ const CartProvider = ({ children }) => {
     const updateLocalProducts = (product) => {
         const updatedLocalProducts = {
             ...localProducts,
-            [product.variant_id]: product
+            [product.variant_id]:
+                localProducts[product.variant_id] ?
+                    { ...localProducts[product.variant_id], ...product } :
+                    product
         }
         setLocalProducts(updatedLocalProducts);
         localStorage.setItem("localProducts", JSON.stringify(updatedLocalProducts))
@@ -296,8 +298,6 @@ const CartProvider = ({ children }) => {
                 removeFromCart,
                 removeCart,
                 findCartProduct,
-                shippingAmount,
-                setShippingAmount,
                 localProducts
             }}
         >

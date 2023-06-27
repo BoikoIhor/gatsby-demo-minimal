@@ -36,14 +36,14 @@ const useChargebee = (props) => {
     const [additionalData, setAdditionalData] = useState([]);
 
     useEffect(() => {
-        if (!cartTotal || !currency) {
+        if (!cartTotal || !currency.currency_code || !Object.keys(customerData).length) {
             return;
         }
 
         const intentData = {
             customer_id: customerData.form_fields.find(field => field.name === 'chargebee_id').value,
             amount: cartTotal * 100,
-            currency_code: currency.currency_code,
+            currency_code: currency.currency_code ?? 'EUR',
             gateway_account_id: GATSBY_PAYMENT_GATEWAY_ACCOUNT_ID,
             payment_method_type: 'card',
         }
@@ -52,7 +52,7 @@ const useChargebee = (props) => {
              .then(({ data }) => {
                  setPaymentIntent(data.payment_intent);
              })
-    }, [cartTotal])
+    }, [cartTotal, currency, customerData])
 
     return {
         paymentIntent,

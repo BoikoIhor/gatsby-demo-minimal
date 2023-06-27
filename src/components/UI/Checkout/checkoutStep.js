@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 const CheckoutStep = props => {
-    const {activeStep, currentStep, children} = props;
+    const { activeStep, currentStep, children } = props;
 
     return (
-        <div className={"checkout__step" + (activeStep === currentStep ? " checkout__step--active" : "")}>
+        <div className={"checkout__step" + (activeStep === currentStep ? " checkout__step--active" : "")}
+             data-step={currentStep}>
             {
-                (activeStep >= currentStep) &&
-                children
+                (activeStep >= currentStep) && (
+                    children
+                )
             }
         </div>
     );
