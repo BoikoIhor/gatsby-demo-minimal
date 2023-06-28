@@ -32,13 +32,15 @@
     @include media-laptop {
       gap: 37px;
     }
+
+
   }
 
   .slider-wrapper {
     padding-left: 0;
 
     .swiper {
-      padding: 0 $padding;
+      padding: 0;
     }
   }
 

@@ -8,8 +8,8 @@ import BannerArrowIcon from "images/svg/bannerArrow.svg";
 
 
 const BlogSlider = (props) => {
-  const { sliderData, isHomepage } = props;
-  const homepageSliderConfig = {
+  const { sliderData } = props;
+    let sliderConfig = {
     direction: "horizontal",
     spaceBetween: 16,
     slidesPerView: 1.2,
@@ -27,22 +27,6 @@ const BlogSlider = (props) => {
       },
       1440: {
         slidesPerView: 4,
-        spaceBetween: 28,
-      }
-    },
-    navigation: true,
-  };
-
-  const pdpSliderConfig = {
-    direction: "horizontal",
-    spaceBetween: 16,
-    slidesPerView: 1.2,
-    breakpoints: {
-      412: {
-        slidesPerView: 1.2,
-      },
-      1024: {
-        slidesPerView: 2,
         spaceBetween: 28,
       }
     },
@@ -71,7 +55,7 @@ const BlogSlider = (props) => {
             </div>
         </div>
       <div className={`blog-slider__slides`}>
-        <Slider config={isHomepage ? homepageSliderConfig : pdpSliderConfig }>
+        <Slider config={sliderConfig}>
           {sliderData.slides.map((slide, key) => {
             return (
                 <div className="blog-slide" key={key}>

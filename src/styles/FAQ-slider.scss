@@ -10,7 +10,6 @@
   &__title {
     @extend .typography__h2;
     margin-bottom: 18px;
-    padding: 0 $padding;
 
     @include media-laptop {
       margin-bottom: 40px;
@@ -110,7 +109,7 @@
     padding-left: 0;
 
     .swiper {
-      padding: 0 $padding;
+      padding: 0;
     }
   }
 }

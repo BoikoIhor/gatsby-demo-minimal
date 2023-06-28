@@ -20,14 +20,12 @@
   &__title {
     @extend .typography__h2;
     margin-bottom: 20px;
-    padding: 0 $padding;
   }
 
   &__slides {
     display: flex;
     overflow: hidden;
     gap: 28px;
-    padding: 0 $padding;
 
       @include media-laptop {
           gap: 37px;

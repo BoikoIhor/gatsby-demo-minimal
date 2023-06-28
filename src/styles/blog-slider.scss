@@ -15,8 +15,8 @@
   &__title-container {
     display: flex;
     margin-bottom: 20px;
+    top: $padding;
     justify-content: space-between;
-    padding: 0 $padding;
   }
 
   &__title {
@@ -36,7 +36,6 @@
       display: grid;
       justify-content: end;
       margin-top: 30px;
-      padding: 0 $padding;
 
       @include media-tablet {
           display: none;
@@ -47,7 +46,6 @@
     display: flex;
     overflow: hidden;
     gap: 28px;
-    padding: 0 $padding;
 
       @include media-laptop {
           gap: 37px;

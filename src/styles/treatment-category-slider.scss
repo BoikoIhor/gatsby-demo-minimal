@@ -30,7 +30,6 @@
     display: flex;
     overflow: hidden;
     gap: 28px;
-    padding: 0 $padding;
 
     @include media-laptop {
       gap: 37px;

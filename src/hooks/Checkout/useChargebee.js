@@ -36,7 +36,7 @@ const useChargebee = (props) => {
     const [additionalData, setAdditionalData] = useState([]);
 
     useEffect(() => {
-        if (!cartTotal || !currency.currency_code || !Object.keys(customerData).length) {
+        if (!cartTotal || !currency) {
             return;
         }
 

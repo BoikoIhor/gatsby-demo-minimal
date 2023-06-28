@@ -65,16 +65,12 @@ async function getTicketsComments(contactData, type) {
 
 export default async function handler(req, res) {
     let responce = [];
+    let contactData =  await getContact(req.query.customer_id);
 
-    try {
-        let contactData = await getContact(req.query.customer_id);
-        if (contactData) {
-            let type = req.query.type || '';
-            responce = await getTicketsComments(contactData, type);
-        }
-        res.json(responce);
+    if(contactData) {
+        let type =  req.query.type || '';
+        responce = await getTicketsComments(contactData, type);
     }
-    catch (error) {
-        res.status(500).json({ error: error });
-    }
+
+    res.json(responce);
 }

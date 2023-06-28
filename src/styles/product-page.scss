@@ -258,15 +258,6 @@
 
   &__dots-slider {
     width: 100%;
-
-    &-title {
-      padding: 0 $padding;
-      margin-bottom: 0;
-
-      @include media-tablet {
-        margin-bottom: 23px;
-      }
-    }
   }
 
   &__radio {
@@ -341,6 +332,7 @@
 
     & .homepage__dropdown-banner__content {
       width: 100%;
+      align-self: flex-start;
 
       @include media-tablet {
         width: 50%;
@@ -380,7 +372,6 @@
     top: 46px;
     left: 16px;
     max-width: 290px;
-    padding: 0 $padding;
 
     @include media-tablet {
       max-width: 523px;
@@ -419,7 +410,6 @@
     width: 123px;
     bottom: 20px;
     left: 19px;
-    margin: $padding;
 
     @include media-tablet {
       bottom: 33px;
@@ -472,11 +462,6 @@
   }
 
   &__doctor {
-    &-banner {
-        width: 100%;
-        padding: 0 $padding;
-    }
-
     &-background {
       @include display-flex;
       background-color: $background-light-blue;
@@ -554,13 +539,19 @@
   &__reviews {
     .slider-wrapper .swiper .swiper-wrapper {
       margin-bottom: 40px;
+      display: flex;
+      
+      .swiper-slide {
+        display: flex;
+        align-self: stretch;
+        height: auto;
+      }
     }
 
     &-title {
       margin-bottom: 20px;
       @include display-flex;
       justify-content: space-between;
-      padding: 0 $padding;
 
       @include media-tablet {
         flex-direction: row;
@@ -571,6 +562,7 @@
       @include display-flex;
       padding: 15px 30px;
       min-height: 350px;
+
       margin: 5px;
       gap: 16px;
       background-color: $white;
@@ -620,8 +612,7 @@
   &__slider-dots {
     &.swiper-container {
       width: 100%;
-      height: 520px;
-      padding: 0 $padding;
+      height: 475px;
 
       @include media-tablet {
         height: 540px;
@@ -715,7 +706,6 @@
     position: relative;
     width: 100%;
     min-height: 379px;
-    padding: 0 $padding;
 
     @include media-tablet {
       margin-top: 60px;
@@ -930,7 +920,6 @@
   width: 100%;
   align-items: flex-start;
   gap: 20px;
-  padding: 0 $padding;
 
   @include media-tablet {
     gap: 20px;

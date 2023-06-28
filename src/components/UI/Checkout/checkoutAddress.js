@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useCheckout } from "context/checkoutContext";
 import { useCart } from "context/cartContext";
-import { removeEmpty } from "utils/helper";
 
 import CartSummary from "components/UI/Cart/cartSummary";
 import ShippingAddress from "components/UI/Checkout/Shipping/shippingAddress";
@@ -11,10 +10,10 @@ import Input from "components/UI/input";
 import Button from "components/UI/button";
 
 const CheckoutAddress = (props) => {
-    const { nextStepAction, customerData } = props;
+    const {nextStepAction, customerData} = props;
 
-    const { cartItems } = useCart();
-    const { updateOrder } = useCheckout();
+    const {cartItems} = useCart();
+    const {updateOrder} = useCheckout();
 
     const [customerMessage, setCustomerMessage] = useState("");
 
@@ -44,10 +43,9 @@ const CheckoutAddress = (props) => {
                 }
             })
             .then(response => {
-                let newShippingAddress = {}, newBillingAddress = {};
                 if (response.data.length) {
-                    newShippingAddress = { ...response.data[0], email: customerData.email };
-                    newBillingAddress = { ...response.data[0] };
+                    setShippingAddress({...response.data[0], email: customerData.email});
+                    setBillingAddress(response.data[0]);
                 } else {
                     const customerFields = {
                         first_name: customerData.first_name,
@@ -56,40 +54,55 @@ const CheckoutAddress = (props) => {
                         company: customerData.company
                     }
 
-                    newShippingAddress = { ...shippingAddress, ...customerFields, email: customerData.email };
-                    newBillingAddress = { ...billingAddress, ...customerFields }
+                    setShippingAddress({...shippingAddress, ...customerFields, email: customerData.email});
+                    setBillingAddress({...billingAddress, ...customerFields});
                 }
-
-                setShippingAddress(newShippingAddress);
-                setBillingAddress(newBillingAddress);
-
-
                 // TODO: Create chargebee customer with shipping address
-                if (!customerData.form_fields.find(field => field.name === 'chargebee_id')?.value) {
-                    axios
-                        .post('api/chargebee/v2/customers', {
-                            email: customerData.email,
-                            first_name: customerData.first_name,
-                            last_name: customerData.last_name,
-                            shipping_address: newShippingAddress
-                        })
-                        .then(response => {
-                            if (response.data.result) {
-                                const chargebee_id = response.data.result.id;
+                if (!customerData.form_fields || customerData.form_fields.find(field => field.name === 'chargebee_id').value === "") {
+                    let chargebee_id;
+                    let customerChargebeeData = {
+                        email: customerData.email,
+                        first_name: customerData.first_name,
+                        last_name: customerData.last_name,
+                        shipping_address: shippingAddress
+                    }
 
+                    const chargebeeCustomerRequestData = {
+                        method: "POST",
+                        url: process.env.GATSBY_APP_URL + "/api/chargebee/v2/customers",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                        data: customerChargebeeData,
+                    }
+                    axios(chargebeeCustomerRequestData)
+                        .then(response => {
+                            console.log('responseChargebeeCustomer222: ', response.data);
+                            if (response.data.result) {
+                                chargebee_id = response.data.result.id;
                                 if (chargebee_id) {
-                                    axios
-                                        .put('/api/v3/customers/form-field-values', [{
+                                    const formFieldRequestData = {
+                                        method: "PUT",
+                                        url: process.env.GATSBY_APP_URL + "/api/v3/customers/form-field-values",
+                                        headers: {
+                                            "Access-Control-Allow-Origin": "*",
+                                            "Content-Type": "application/json",
+                                            Accept: "application/json",
+                                        },
+                                        data: [{
                                             "name": "chargebee_id",
                                             "value": chargebee_id,
                                             "customer_id": customerData.id
-                                        }])
+                                        }]
+                                    }
+                                    axios(formFieldRequestData)
                                         .then(response => {
                                             console.log('formFieldsResponse', response.data);
-                                        })
-                                        .catch(error => {
-                                            console.log('formFieldsResponse', error);
-                                        });
+                                        }).catch(error => {
+                                        console.log('formFieldsResponse', error);
+                                    });
                                 }
                             }
                         });
@@ -114,6 +127,10 @@ const CheckoutAddress = (props) => {
     useEffect(() => {
         updateOrder('customer_id', customerData.id);
     }, [customerData])
+
+    const removeEmpty = (obj) => Object.fromEntries(
+        Object.entries(obj).filter(([_, v]) => v !== null && v !== '')
+    );
 
     return (
         <div className="checkout-address">

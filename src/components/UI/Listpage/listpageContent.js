@@ -25,13 +25,6 @@ export const listpageQuery = graphql`
               url
             }
           }
-          sliderButton {
-            text
-            type
-            href
-            isThin
-            isArrowShow
-          }
           slides {
             id
             title

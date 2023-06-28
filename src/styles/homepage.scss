@@ -24,11 +24,10 @@
     align-items: center;
     background: $gray;
     border-radius: 30px;
-    padding: $padding 0;
+    padding: $padding;
     margin-top: -30px;
     position: relative;
     gap: 54px;
-    overflow: hidden;
 
     @include media-laptop {
       gap: 120px;
@@ -91,7 +90,6 @@
     max-width: 2700px;
     border-radius: 30px;
     width: 100%;
-    padding: 0 $padding;
 
     @include media-tablet {
       justify-content: space-between;
@@ -166,7 +164,6 @@
   background: none;
   height: auto;
   max-width: 2700px;
-  padding: 0 $padding;
 
   @include media-tablet {
     height: inherit;
@@ -191,7 +188,6 @@
     top: 10%;
     left: 5%;
     transform: none;
-    padding: 0 $padding;
 
     @include media-tablet {
       top: 50%;

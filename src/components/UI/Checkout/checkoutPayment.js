@@ -14,7 +14,6 @@ import Button from "components/UI/button";
 import CartSummary from "components/UI/Cart/cartSummary";
 import Methods from "components/UI/Checkout/Payment/methods";
 import { GTMPaymentFailedEvent, GTMPurchaseEvent } from "components/GTM/gtmCheckout";
-import { removeEmpty } from "utils/helper";
 
 const CheckoutPayment = (props) => {
     const { nextStepAction } = props;
@@ -37,7 +36,7 @@ const CheckoutPayment = (props) => {
     useEffect(() => {
         const incompleteStatus = orderStatuses.find(status => status.system_label === "Incomplete")
         axios
-            .post("/api/v2/orders", { ...removeEmpty(order), status_id: incompleteStatus.id })
+            .post("/api/v2/orders", { ...order, status_id: incompleteStatus.id })
             .then(async ({ data: order }) => {
                 setCreatedOrder(order)
 
